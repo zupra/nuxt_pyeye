@@ -1,0 +1,166 @@
+/*-------------------------------------------*\
+http://zuga.net/articles/html-heading-elements/
+h1: 2
+h2: 1.5
+h3: 1,17
+h4: 1
+h5: 0,83
+h6: 0,67
+
+=> Utilities for FONT-SIZE
+unit rem
+s2:   0.75,
+s1:   0.85,
+// "1": 1,
+x1:   1.125,
+x2:   1.5,
+x3:   1.75, // 1.875,
+x4:   2.25,
+x5:   3,
+x6:   4,
+\*-------------------------------------------*/
+
+// ? .btn
+// fontSizes = { xs:0.75, sm:0.85,   lg:1.125, xl:1.5, x1:1.75, x2:2.25, x3:3, x4:4 }
+fontSizes = { s2:0.75, s1:0.85,   x1:1.125, x2:1.5, x3:1.75, x4:2.25, x5:3, x6:4 }
+FontSize(sizes)
+  for key, v in sizes
+    val = unit(v, em)
+    .text_{key}
+      font-size: val
+FontSize(fontSizes)
+
+
+
+/*-------------------------------------------*\
+=> Utilities for MARGIN
+{N} unit em
+"1": .25,
+"2": .5,
+"3": 1,
+"4": 1.5,
+"5": 3
+
+.m-{N}
+.mx-{N}
+.my-{N}
+
+t:top, r:right, b:bottom, l:left
+.m{t|r|b|l}_{N}
+\*-------------------------------------------*/
+marginSpace = { "1":.25, "2":.5, "3":1, "4":1.5, "5":3 }
+direction = { t: top, r: right, b: bottom, l: left }
+// m_{N} mx_{N} my_{N}
+Margins(sizes)
+  for key, v in sizes
+    val = unit(v, em)
+    &-{key}
+      margin val
+    &x-{key}
+      margin-left val
+      margin-right val
+    &y-{key}
+      margin-top val
+      margin-bottom val
+// m{t|r|b|l}_{N}
+Margin_dir(sizes, direction)
+  for K, V in direction
+    &{K}
+      for key, v in sizes
+        val = unit(v, em)
+        &-{key}
+          margin-{V} val
+// .m{t|r|b|l} :auto (for Flex)
+// https://codepen.io/melnik909/pen/RwwOxOE
+Margin_auto(direction)
+  for k, v in direction
+    &{k}_auto
+      margin-{v} auto
+.m
+  &_auto
+    margin: auto
+  Margin_auto(direction)
+  Margins(marginSpace)
+  Margin_dir(marginSpace, direction)
+
+
+
+
+/*-------------------------------------------*\
+=> Utilities for PADDING
+{N} unit em
+s1: .25,
+"1": .5,
+"2": .75,
+"3": 1,
+"4": 1.5,
+"5": 2.5
+
+.p-{N}
+\*-------------------------------------------*/
+paddingSpace = { s1:.25, "1":.5, "2":.75, "3":1, "4":1.5, "5":2.5 }
+Paddings(sizes)
+  for key, v in sizes
+    val = unit(v, em)
+    &-{key}
+      padding val
+    &x-{key}
+      padding-left val
+      padding-right val
+    &y-{key}
+      padding-top val
+      padding-bottom val
+
+.p
+  Paddings(paddingSpace)
+
+
+// =========
+
+
+.center
+  text-align center
+
+.bold
+  font-weight bold
+
+
+
+
+// ==========
+
+.flex_col
+  flex-direction column
+
+.flex_col, .flex
+  display flex
+
+.x_start
+  justify-content flex-start
+
+.x_end
+  justify-content flex-end
+
+.x_center
+  justify-content center
+
+.x_se
+  justify-content space-evenly
+
+.x_sb
+  justify-content space-between
+
+.x_base
+  align-items baseline
+
+.y_center
+  align-items center
+
+.y_start
+  align-items flex-start
+
+.y_end
+  align-items flex-end
+
+.y_base
+  align-items baseline

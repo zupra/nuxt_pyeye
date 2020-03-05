@@ -1,55 +1,140 @@
 <template>
-  <div>
-    <nuxt />
+  <div id="layout">
+    <Menu id="layout_topNav" mode="horizontal" active-name="1" theme="dark">
+      <MenuItem name="1">
+        <Icon type="ios-paper" />MenuItem
+      </MenuItem>
+      <MenuItem name="2">
+        <Icon type="ios-people" />MenuItem
+      </MenuItem>
+      <Submenu name="3">
+        <template slot="title">
+          <Icon type="ios-stats" />MenuItem
+        </template>
+        <MenuGroup title="title">
+          <MenuItem name="3-1">MenuItem</MenuItem>
+          <MenuItem name="3-2">MenuItem</MenuItem>
+          <MenuItem name="3-3">MenuItem</MenuItem>
+        </MenuGroup>
+        <MenuGroup title="title">
+          <MenuItem name="3-4">MenuItem</MenuItem>
+          <MenuItem name="3-5">MenuItem</MenuItem>
+        </MenuGroup>
+      </Submenu>
+      <MenuItem name="4">
+        <Icon type="ios-construct" />MenuItem
+      </MenuItem>
+    </Menu>
+
+    <Menu id="layout_sidebar" active-name="1-2" :open-names="['1']">
+      <Submenu name="1">
+        <template slot="title">
+          <Icon type="ios-analytics" />Navigation One
+        </template>
+        <MenuGroup title="Item 1">
+          <MenuItem name="1-1">Option 1</MenuItem>
+          <MenuItem name="1-2">Option 2</MenuItem>
+        </MenuGroup>
+        <MenuGroup title="Item 2">
+          <MenuItem name="1-3">Option 3</MenuItem>
+          <MenuItem name="1-4">Option 4</MenuItem>
+        </MenuGroup>
+      </Submenu>
+      <Submenu name="2">
+        <template slot="title">
+          <Icon type="ios-filing" />Navigation Two
+        </template>
+        <MenuItem name="2-1">Option 5</MenuItem>
+        <MenuItem name="2-2">Option 6</MenuItem>
+        <Submenu name="3">
+          <template slot="title">Submenu</template>
+          <MenuItem name="3-1">Option 7</MenuItem>
+          <MenuItem name="3-2">Option 8</MenuItem>
+        </Submenu>
+      </Submenu>
+      <Submenu name="4">
+        <template slot="title">
+          <Icon type="ios-cog" />Navigation Three
+        </template>
+        <MenuItem name="4-1">Option 9</MenuItem>
+        <MenuItem name="4-2">Option 10</MenuItem>
+        <MenuItem name="4-3">Option 11</MenuItem>
+        <MenuItem name="4-4">Option 12</MenuItem>
+      </Submenu>
+    </Menu>
+
+    <div id="layout_main">
+      <Breadcrumb :style="{margin: '10px 0 20px'}">
+        <BreadcrumbItem>
+          <N-link to="/">
+            <Icon type="ios-home" size="24" />Home
+          </N-link>
+        </BreadcrumbItem>
+        <BreadcrumbItem>Components</BreadcrumbItem>
+      </Breadcrumb>
+
+      <nuxt />
+    </div>
+
+    <footer id="layout_footer">© footer</footer>
   </div>
 </template>
 
+
+
+
+
+<script>
+export default {
+  middleware: ['login'],
+  methods: {
+    logout() {
+      this.$store.commit('user/LOGOUT')
+      this.$router.push('/login')
+    }
+  }
+}
+</script>
+
+
+
 <style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+#layout {
+  display: grid;
+  height: 100vh;
+  overflow-x: hidden;
+
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'sidebar header'
+    'sidebar main'
+    'sidebar footer';
 }
 
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
+#layout_main,
+#layout_sidebar {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
+#layout_topNav {
+  grid-area: header;
+  overflow: visible;
 }
 
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
+#layout_sidebar {
+  grid-area: sidebar;
 }
 
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
+#layout_main {
+  grid-area: main;
+  padding: 1em 2em;
 }
 
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+#layout_footer {
+  grid-area: footer;
+  background: #f8f8f8;
+  padding: 1em;
 }
 </style>

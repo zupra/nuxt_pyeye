@@ -28,13 +28,11 @@ export default {
   },
 
   methods: {
-    async login() {
+    login() {
 
+      this.$store.commit('user/logIn', this.User.username)
 
-      const data = await this.$axios.$post("/login/", { ...this.User });
-
-      console.table(data)
-
+      this.$router.push("/");
 
       // try {
       //   await this.$auth.loginWith('local', {

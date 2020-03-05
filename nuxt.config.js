@@ -1,5 +1,5 @@
 export default {
-  mode: 'spa',
+  mode: 'universal',
   /*
    ** Headers of the page
    */
@@ -19,11 +19,14 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: {
+    color: '#26a69a',
+    height: '5px'
+  },
   /*
    ** Global CSS
    */
-  css: ['iview/dist/styles/iview.css'],
+  css: ['iview/dist/styles/iview.css', { src: '~assets/main.styl', lang: 'stylus' }],
   /*
    ** Plugins to load before mounting the App
    */
@@ -49,7 +52,8 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: process.env.API_URL || "http://pyeye.ru/core/api"
+    withCredentials: true,
+    baseURL: process.env.API_URL || "http://pyeye.ru/core/api" // "http://127.0.0.1/core/api/" "http://192.168.1.165/core/api/" 
   },
 
 

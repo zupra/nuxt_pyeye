@@ -17,7 +17,10 @@
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/dotenv": "^1.4.0",
     "iview": "^3.1.5",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "stylus": "^0.54.7",
+    "stylus-loader": "^3.0.2",
+    "vuex-persist": "^2.2.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",

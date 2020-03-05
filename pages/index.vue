@@ -1,74 +1,35 @@
 <template>
-  <div>
-    <Menu mode="horizontal" :theme="theme1" active-name="1" theme="dark">
-      <MenuItem name="1">
-        <Icon type="ios-paper" />MenuItem
-      </MenuItem>
-      <MenuItem name="2">
-        <Icon type="ios-people" />MenuItem
-      </MenuItem>
-      <Submenu name="3">
-        <template slot="title">
-          <Icon type="ios-stats" />MenuItem
-        </template>
-        <MenuGroup title="title">
-          <MenuItem name="3-1">MenuItem</MenuItem>
-          <MenuItem name="3-2">MenuItem</MenuItem>
-          <MenuItem name="3-3">MenuItem</MenuItem>
-        </MenuGroup>
-        <MenuGroup title="title">
-          <MenuItem name="3-4">MenuItem</MenuItem>
-          <MenuItem name="3-5">MenuItem</MenuItem>
-        </MenuGroup>
-      </Submenu>
-      <MenuItem name="4">
-        <Icon type="ios-construct" />MenuItem
-      </MenuItem>
-    </Menu>
 
-    <Menu active-name="1-2" :open-names="['1']">
-      <Submenu name="1">
-        <template slot="title">
-          <Icon type="ios-analytics" />Navigation One
-        </template>
-        <MenuGroup title="Item 1">
-          <MenuItem name="1-1">Option 1</MenuItem>
-          <MenuItem name="1-2">Option 2</MenuItem>
-        </MenuGroup>
-        <MenuGroup title="Item 2">
-          <MenuItem name="1-3">Option 3</MenuItem>
-          <MenuItem name="1-4">Option 4</MenuItem>
-        </MenuGroup>
-      </Submenu>
-      <Submenu name="2">
-        <template slot="title">
-          <Icon type="ios-filing" />Navigation Two
-        </template>
-        <MenuItem name="2-1">Option 5</MenuItem>
-        <MenuItem name="2-2">Option 6</MenuItem>
-        <Submenu name="3">
-          <template slot="title">Submenu</template>
-          <MenuItem name="3-1">Option 7</MenuItem>
-          <MenuItem name="3-2">Option 8</MenuItem>
-        </Submenu>
-      </Submenu>
-      <Submenu name="4">
-        <template slot="title">
-          <Icon type="ios-cog" />Navigation Three
-        </template>
-        <MenuItem name="4-1">Option 9</MenuItem>
-        <MenuItem name="4-2">Option 10</MenuItem>
-        <MenuItem name="4-3">Option 11</MenuItem>
-        <MenuItem name="4-4">Option 12</MenuItem>
-      </Submenu>
-    </Menu>
+  <div>
+
+    <Button class="mr-3" v-for="It in links" :to="`${It.link}`">
+      {{It.name}}
+    </Button>
+
   </div>
+
+
+
 </template>
 <script>
 export default {
   data() {
     return {
-      theme3: 'light'
+      links: [
+        {
+          name: 'Прошедшие проекты',
+          link: 'past_projects'
+        },
+        {
+          name: 'Текущие проекты',
+          link: 'current_projects'
+        },
+        {
+          name: 'Начать новый проект',
+          link: 'new_project'
+        }
+
+      ]
     }
   }
 }
