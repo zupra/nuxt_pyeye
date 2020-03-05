@@ -1,14 +1,20 @@
 <template>
 <div id="loginArea">
   <Card id="loginArea_Card">
-    <form @submit.prevent="submit">
+    <form @keyup.enter="login">
+      <!-- <p>логин</p> -->
       <Input v-model="User.username" size="large" placeholder="username" />
       <br />
       <br />
+      <!-- <p>парoль</p> -->
       <Input type="password" v-model="User.password" size="large" placeholder="password" />
       <br />
       <br />
-      <Button long type="primary" @click="login">login</Button>
+      
+      <Button long type="primary" 
+        @click="login"
+        
+      >login</Button>
     </form>
   </Card>
 </div>
