@@ -89,7 +89,9 @@
 
 
 
-    <h2 class="mt-4">Уровень дохода семьи</h2>
+    <!-- <h2 class="mt-4">Уровень дохода семьи</h2> -->
+    <br>
+    <Divider class="mt-5" orientation="left">Уровень дохода</Divider>    
     <div class="flex">
       <div>
         <h3>На члена семьи</h3>
@@ -99,7 +101,6 @@
           <Input v-model="money_family[1]" style="width:12em"></Input>
         </div>
       </div>
-
       <div class="ml-5">
         <h3>По самооценке</h3>
         <Select placeholder="По самооценке">
@@ -107,19 +108,16 @@
         </Select>
       </div>
     </div>  
-
-
-    <h2 class="mt-4">Уровень личного дохода</h2>
+    <!-- <h2 class="mt-4">Уровень личного дохода</h2> -->
     <div class="flex">
       <div>
-        <h3>интервал</h3>
+        <h3>личный доход</h3>
         <div class="flex">
           <Input v-model="money_self[0]" style="width:12em"></Input>
           <Slider v-model="money_self" range class="mx-2" style="width:10em"></Slider>
           <Input v-model="money_self[1]" style="width:12em"></Input>
         </div>
       </div>
-
       <div class="ml-5">
         <h3>По самооценке</h3>
         <Select placeholder="По самооценке">
@@ -129,22 +127,27 @@
     </div> 
 
 
+    <!-- РАБОТА -->
+    <Divider />
     <div class="flex mt-4">
       <div>
         <h3>Не работающие в сфере</h3>
+
+        <div>работающие в сфере – Реклама, Связи с общественностью, Маркетинг, Маркетинговые
+исследования, Социология, Психология, Средства массовой информации, Журналистика, ТВ и
+радиовещание</div>
+
+
         <Select placeholder="TODO!!!">
           <Option v-for="It in [1,2,3,4,5]">{{It}}</Option>
         </Select>
       </div>
-
-      <div class="ml-5">
-        <h3>Работающие в сфере</h3>
-        <Select placeholder="TODO!!!">
-          <Option v-for="It in [1,2,3,4,5]">{{It}}</Option>
-        </Select>
-      </div>
-
-
+    </div>
+    <div class="ml-5">
+      <h3>Работающие в сфере</h3>
+      <Select placeholder="TODO!!!">
+        <Option v-for="It in [1,2,3,4,5]">{{It}}</Option>
+      </Select>
     </div>
 
 
@@ -166,58 +169,45 @@
     <Divider />
     <br />
 
-    <div class="flex">
-      <Form label-position="top" style="width: 200px">
-        <FormItem label="Название">
-          <Input></Input>
-        </FormItem>
-        <FormItem label="Описание">
-          <Input></Input>
-        </FormItem>
-        <FormItem label="Задачи">
-          <Input></Input>
-        </FormItem>
-      </Form>
 
-      <div class="ml-5">
-        <h3 class="center">Выбор типа стимула (выбрать какой и количество)</h3>
-        <div class="flex">
-          <a class="m-5 center">
-            <h3>Видео</h3>
-            <Icon type="ios-videocam" size="64"/>
-          </a>
-          <a class="m-5 center">
-            <h3>Сайт</h3>
-            <Icon type="ios-desktop" size="64"/>
-          </a>
-          <a class="m-5 center">
-            <h3>Упаковка/бренд </h3>
-            <Icon type="ios-thumbs-up-outline" size="64" />
-          </a>
-          <a class="m-5 center">
-            <h3>Фильм </h3>
-            <Icon type="ios-thumbs-up-outline" size="64" />
-          </a>
-          <a class="m-5 center">
-            <h3>Приложение </h3>
-            <Icon type="ios-thumbs-up-outline" size="64" />
-          </a>
-          <a class="m-5 center">
-            <h3>Текст </h3>
-            <Icon type="ios-thumbs-up-outline" size="64" />
-          </a>
-          <a class="m-5 center">
-            <h3>Ритейл </h3>
-            <Icon type="ios-thumbs-up-outline" size="64" />
-          </a>
-          <a class="m-5 center">
-            <h3>Аудио</h3>
-            <Icon type="ios-thumbs-up-outline" size="64" />
-          </a>
-        </div>
-
-
+    <div class="ml-5">
+      <h3 class="center">Выбор типа стимула (выбрать какой и количество)</h3>
+      <div class="flex">
+        <a class="m-5 center">
+          <h3>Видео</h3>
+          <Icon type="ios-videocam" size="64"/>
+        </a>
+        <a class="m-5 center">
+          <h3>Сайт</h3>
+          <Icon type="ios-desktop" size="64"/>
+        </a>
+        <a class="m-5 center">
+          <h3>Упаковка/бренд </h3>
+          <Icon type="ios-thumbs-up-outline" size="64" />
+        </a>
+        <a class="m-5 center">
+          <h3>Фильм </h3>
+          <Icon type="ios-thumbs-up-outline" size="64" />
+        </a>
+        <a class="m-5 center">
+          <h3>Приложение </h3>
+          <Icon type="ios-thumbs-up-outline" size="64" />
+        </a>
+        <a class="m-5 center">
+          <h3>Текст </h3>
+          <Icon type="ios-thumbs-up-outline" size="64" />
+        </a>
+        <a class="m-5 center">
+          <h3>Ритейл </h3>
+          <Icon type="ios-thumbs-up-outline" size="64" />
+        </a>
+        <a class="m-5 center">
+          <h3>Аудио</h3>
+          <Icon type="ios-thumbs-up-outline" size="64" />
+        </a>
       </div>
+
+
     </div>
 
     <br />
