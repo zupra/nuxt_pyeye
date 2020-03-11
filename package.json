@@ -13,11 +13,17 @@
     "test": "jest"
   },
   "dependencies": {
+    "@fullcalendar/core": "^4.4.0",
+    "@fullcalendar/daygrid": "^4.4.0",
+    "@fullcalendar/vue": "^4.4.0",
     "@nuxtjs/auth": "^4.8.5",
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/dotenv": "^1.4.0",
     "iview": "^3.1.5",
+    "moment": "^2.24.0",
     "nuxt": "^2.0.0",
+    "pug": "^2.0.4",
+    "pug-plain-loader": "^1.0.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
     "vuex-persist": "^2.2.0"

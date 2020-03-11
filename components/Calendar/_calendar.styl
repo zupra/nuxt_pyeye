@@ -1,0 +1,116 @@
+$width = 280px
+$time = ($width / 7)
+$M = ($width / 4)
+
+
+.Calendar_Input
+  position relative
+  display: inline-block;
+  input
+    cursor: pointer
+    padding-left: 2.4em !important
+    background #FFF url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16' fill='#C7CEDE'><path d='M13 2h-1v1.5c0 .28-.22.5-.5.5h-2c-.28 0-.5-.22-.5-.5V2H6v1.5c0 .28-.22.5-.5.5h-2c-.28 0-.5-.22-.5-.5V2H2c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h11c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm0 12H2V5h11v9zM5 3H4V1h1v2zm6 0h-1V1h1v2zM6 7H5V6h1v1zm2 0H7V6h1v1zm2 0H9V6h1v1zm2 0h-1V6h1v1zM4 9H3V8h1v1zm2 0H5V8h1v1zm2 0H7V8h1v1zm2 0H9V8h1v1zm2 0h-1V8h1v1zm-8 2H3v-1h1v1zm2 0H5v-1h1v1zm2 0H7v-1h1v1zm2 0H9v-1h1v1zm2 0h-1v-1h1v1zm-8 2H3v-1h1v1zm2 0H5v-1h1v1zm2 0H7v-1h1v1zm2 0H9v-1h1v1z' /></svg>") 0 center / contain no-repeat
+
+
+  .Calendar
+    position: absolute;
+    z-index: 1;
+
+.Calendar
+  background #FFF
+  box-shadow: 0 1px 8px rgba(#000, .25);
+  width: $width
+  text-align: center
+  user-select: none
+.Cr
+  &-Head,
+  &-Week,
+  &-Days
+    display: flex
+
+  &-Head,
+  &-Week
+    font-weight bold
+
+  &-Week
+    line-height: 2em
+    &_day
+      width: $time
+
+  &-Head
+    background: #477dca
+    color: #FFF
+    justify-content: space-between
+    line-height: $time
+
+    &_current
+      flex: 1
+
+    &_ltMonth,
+    &_gtMonth
+      background #3498db
+      cursor: pointer
+      width: $time
+      &:hover
+        background: #3498db + 10%
+    // .hidden
+    //   pointer-events: none
+    //   background: transparent
+
+  &-Days
+    flex-wrap: wrap
+    line-height: $time
+
+    &_blank,
+    &_day
+      width: $time
+
+    &_blank
+      color #dee2e6
+
+    &_day
+      cursor: pointer
+      border-radius: 50%
+      &:hover:not(.Today):not(.clickedDay)
+        background: #dee2e6
+
+    // .hidden
+    //   color #dee2e6
+    //   pointer-events: none
+
+    .Today
+      background: aliceblue
+      // position: relative
+      // &:before
+      //   content: 'NOW'
+      //   position: absolute
+      //   top 4px
+      //   left 50%
+      //   transform: translateX(-50%)
+      //   line-height: 1
+      //   font-size: 6px
+
+    .clickedDay
+      color: #FFF
+      font-weight: bold
+      background: #477dca
+
+//=====
+
+.monthsList
+  display: flex
+  //color #477dca
+  flex-wrap wrap
+  line-height $time
+time
+  width: $M
+  cursor pointer
+  &:hover
+    //background: #dee2e6
+    outline 1px solid #dee2e6
+    outline-offset -4px
+.currMonth
+  background #dee2e6
+.CURR
+  color #FFF
+  background #477dca

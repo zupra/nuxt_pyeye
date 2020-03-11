@@ -1,5 +1,5 @@
 export default {
-  mode: 'universal',
+  mode: 'spa',
   /*
    ** Headers of the page
    */
@@ -30,7 +30,10 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/iview'],
+  plugins: [
+    '@/plugins/iview'
+    // {src: '~/plugins/full-calendar.js', ssr: false}
+  ],
   /*
    ** Nuxt.js dev-modules
    */

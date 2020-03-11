@@ -3,7 +3,7 @@
     <h1>Начать новый проект</h1>
     <p>Заполняется «паспортичка» проекта.</p>
     <center>
-      <p>Для порядка «условно» разделим на:</p>
+      <p class="mb-3">Пока что «условно» разделим на:</p>
 
       <N-link class="step mr-3" v-for="It in links" :to="`${It.link}`">{{It.name}}</N-link>
     </center>
@@ -33,6 +33,10 @@ export default {
         {
           name: 'Лаборатория',
           link: '/new_project/laboratory'
+        },
+        {
+          name: 'Респонденты',
+          link: '/new_project/respondent'
         }
       ]
     }
@@ -42,7 +46,12 @@ export default {
 
 <style lang="styl">
 .step
-  font-size: 1.4em;
-.nuxt-link-exact-active
-  font-weight: bold;
+  color inherit
+  font-size: 1.4em
+  border: 1px solid #dcdee2
+  padding: .3em .7em;
+  border-radius .25em
+
+  &.nuxt-link-exact-active
+    border-bottom-color: #2d8cf0;
 </style>

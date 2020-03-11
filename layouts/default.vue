@@ -67,10 +67,10 @@
       <Breadcrumb :style="{margin: '10px 0 20px'}">
         <BreadcrumbItem>
           <N-link to="/">
-            <Icon type="ios-home" size="24" />Home
+            <Icon type="ios-home" size="24" /> Home PROJECT's
           </N-link>
         </BreadcrumbItem>
-        <BreadcrumbItem>Components</BreadcrumbItem>
+        <!-- <BreadcrumbItem>Components</BreadcrumbItem> -->
       </Breadcrumb>
 
       <nuxt />
