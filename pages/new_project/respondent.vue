@@ -2,6 +2,107 @@
 <div>
   <Steps />
   <h1>Респонденты</h1>
+
+
+
+  <Collapse simple class="my-5">
+    <Panel>
+      <b>Создать респондента</b>
+      <div slot="content">
+        <div class="flex mb-4">
+          <div>
+            <p>Эксперимент</p>
+            <Select placeholder="Эксперимент">
+              <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+            </Select>
+          </div>
+          <div class="ml-5">
+            <p>Визиоряд</p>
+            <Select placeholder="Визиоряд">
+              <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+            </Select>
+          </div>
+          <div class="ml-5">
+            <p>Ведущий глаз</p>
+            <Select placeholder="Ведущий глаз">
+              <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+            </Select>
+          </div>
+          <div class="ml-5">
+            <p>Ведущая рука</p>
+            <Select placeholder="Ведущая рука">
+              <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+            </Select>
+          </div>
+        </div>
+
+        <div class="flex mb-4">
+          <div>
+            <p>Пол</p>
+            <Select placeholder="Пол">
+              <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+            </Select>
+          </div>
+
+          <label class="flex_col ml-4">
+            возраст
+            <Input style="width:5em"></Input>
+          </label>
+
+          <label v-for="item in respondent" class="flex_col ml-4">
+            {{item.label}}
+            <Input v-model="item.value"></Input>
+          </label>
+        </div>
+
+        <label class="flex_col mb-5">
+          Комментарий
+          <Input type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Комментарий..."></Input>
+        </label>
+
+        <Button type="primary">Создать</Button>
+      </div>
+    </Panel>
+  </Collapse>
+
+
+
+   
+
+  <div class="flex mb-5">
+    <div>
+      <p>Пол</p>
+      <Select placeholder="Пол">
+        <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+      </Select>
+    </div>
+
+    <div class="ml-4">
+      <p>Ведущий глаз</p>
+      <Select placeholder="Ведущий глаз">
+        <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+      </Select>
+    </div>
+
+    <div class="ml-4">
+      <p>Ведущая рука</p>
+      <Select placeholder="Ведущая рука">
+        <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+      </Select>
+    </div>
+
+
+    <div class="flex_col ml-4">
+      <p>Возраст</p>
+      <span> от
+        <Input style="width:5em"></Input>
+        До
+        <Input style="width:5em"></Input>
+      </span>
+    </div>
+
+  </div>
+
   <div class="flex_wr">
     <Card class="m-2" v-for="User in Users">
       <div class="User">
@@ -52,11 +153,24 @@ export default {
     const { results } = await app.$axios.$get('https://randomuser.me/api/?results=60')
     return { Users: results }
   },
-  // data() {
-  //   return {
-  //     Users: null
-  //   }
-  // }
+  data() {
+    return {
+      respondent: [
+        {
+          value: '',
+          label: 'Имя'   
+        },
+        {
+          value: '',
+          label: 'Фамилия'   
+        },
+        {
+          value: '',
+          label: 'Отчество'   
+        }
+      ]
+    }
+  }
 }
 </script>
 
