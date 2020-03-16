@@ -1,0 +1,7 @@
+.idea/
+node_modules/
+front/bundles/
+package-lock.json
+VERSION
+*diff*
+
