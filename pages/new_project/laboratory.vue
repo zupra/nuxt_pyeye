@@ -1,67 +1,58 @@
 <template>
-<section>
-  <Steps />
+  <section>
+    <Steps />
 
-  <h1>Список лабораторий с их загрузкой на определенное время вперед</h1>
-  <h2>Резервирование времени в лаборатории</h2>
+    <h1>Список лабораторий с их загрузкой на определенное время вперед</h1>
+    <h2>Резервирование времени в лаборатории</h2>
 
-  <Button type="primary" @click="toggleWeekends" v-text="calendarWeekends ? 'без выходных':'c выходными'"></Button>
+    <Button
+      type="primary"
+      @click="toggleWeekends"
+      v-text="calendarWeekends ? 'без выходных':'c выходными'"
+    ></Button>
 
-  
+    <Divider>Календарь загрузки лаборатории</Divider>
 
-  <Divider>Календарь загрузки лаборатории</Divider>
+    <h3>Создать событие</h3>
+    <div class="flex my-3">
+      <Input v-model="newEvent.title" style="width: 300px" placeholder="Название события"></Input>&emsp;
+      <DatePicker type="date" v-model="newEvent.start" placeholder="Начало" @keydown.native.prevent></DatePicker>&emsp;
+      <DatePicker
+        type="date"
+        v-model="newEvent.end"
+        placeholder="Окончание"
+        @keydown.native.prevent
+      ></DatePicker>
 
-
-  <h3>Создать событие</h3>
-  <div class="flex my-3">
-    <Input v-model="newEvent.title" style="width: 300px" placeholder="Название события"></Input>
-    &emsp;
-    <DatePicker 
-      type="date" 
-      v-model="newEvent.start" 
-      placeholder="Начало"
-      @keydown.native.prevent>
-    </DatePicker>
-    &emsp;
-    <DatePicker 
-      type="date" 
-      v-model="newEvent.end" 
-      placeholder="Окончание"
-      @keydown.native.prevent
-    ></DatePicker>
-
-    <!-- &emsp;
+      <!-- &emsp;
     <TimePicker v-model="newEvent.start" format="HH:mm" placeholder="Начало"></TimePicker>
     &emsp;
-    <TimePicker v-model="newEvent.end" format="HH:mm" placeholder="Окончание"></TimePicker> -->
+      <TimePicker v-model="newEvent.end" format="HH:mm" placeholder="Окончание"></TimePicker>-->
+    </div>
+    <Button type="primary" @click="calendarEvents.push(newEvent)">Создать</Button>
 
-  </div>
-  <Button type="primary" @click="calendarEvents.push(newEvent)">Создать</Button>
+    <br />
+    <br />
 
-
-  <br><br>
-
-  <client-only>
-    <FullCalendar
-      class="demo-app-calendar"
-      ref="fullCalendar"
-      height="650"
-      defaultView="dayGridMonth"
-      :header="{
+    <client-only>
+      <FullCalendar
+        class="demo-app-calendar"
+        ref="fullCalendar"
+        height="650"
+        defaultView="dayGridMonth"
+        :header="{
       left: 'prev,next today',
       center: 'title',
-z
     }"
-      :plugins="calendarPlugins"
-      @dateClick="handleDateClick"
-      :events="calendarEvents"
-      :locale="locale"
-      :weekends="calendarWeekends"
-    />
-  </client-only>
+        :plugins="calendarPlugins"
+        @dateClick="handleDateClick"
+        :events="calendarEvents"
+        :locale="locale"
+        :weekends="calendarWeekends"
+      />
+    </client-only>
 
-
-<!-- 
+    <!-- 
 
   <Modal
     :title="`Создать событие ${Date(newEvent.start)}` "
@@ -72,10 +63,8 @@ z
       <Input v-model="newEvent.title" placeholder="Название события"></Input>
     </div>
   </Modal>
- -->
-
-
-</section>
+    -->
+  </section>
 </template>
 
 <script>
@@ -117,8 +106,6 @@ export default {
     }
   },
   methods: {
-
-
     toggleWeekends() {
       this.calendarWeekends = !this.calendarWeekends // update a property
     },
@@ -127,7 +114,6 @@ export default {
       calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
     },
     handleDateClick(arg) {
-
       console.table(arg)
 
       // this.newEvent.start = arg.dateStr
@@ -145,21 +131,20 @@ export default {
       /**/
       this.$Modal.confirm({
         title: 'Создать событие',
-        content: 
-        `<div></div>`,
+        content: `<div></div>`,
         onOk: () => {
-        this.calendarEvents.push({ // add new event data
-          title: 'New Event',
-          start: arg.date,
-          allDay: arg.allDay
-        })
-            this.$Message.info('Создано событие');
+          this.calendarEvents.push({
+            // add new event data
+            title: 'New Event',
+            start: arg.date,
+            allDay: arg.allDay
+          })
+          this.$Message.info('Создано событие')
         },
         onCancel: () => {
-            this.$Message.info('Отмена');
+          this.$Message.info('Отмена')
         }
-      });
-
+      })
 
       /*
       this.$Modal.confirm({
@@ -186,22 +171,18 @@ export default {
         }
       })
       */
-
     }
   }
 }
 </script>
 
 <style>
-
 @import '~/node_modules/@fullcalendar/core/main.css';
 @import '~/node_modules/@fullcalendar/daygrid/main.css';
-@import "~/node_modules/@fullcalendar/timegrid/main.css";
+@import '~/node_modules/@fullcalendar/timegrid/main.css';
 
 .demo-app-calendar {
   margin: 0 auto;
   max-width: 900px;
 }
-
-
 </style>

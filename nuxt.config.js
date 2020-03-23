@@ -63,28 +63,39 @@ export default {
   /**
   
   SessionAuthentication with Nuxt and Django-Rest-Framework
-  https://stackoverflow.com/questions/57059548/how-to-use-sessionauthentication-with-nuxt-and-django-rest-frameworkhttps://stackoverflow.com/questions/57059548/how-to-use-sessionauthentication-with-nuxt-and-django-rest-framework
-  
+  https://stackoverflow.com/questions/57059548/how-to-use-sessionauthentication-with-nuxt-and-django-rest-framework
   */
 
   axios: {
     withCredentials: true,
-    baseURL: process.env.API_URL || 'http://193.34.211.46:30003/core/api/' // 'http://10.0.20.29/core/api/' //"http://pyeye.ru/core/api" // "http://127.0.0.1/core/api/" "http://192.168.1.165/core/api/"
-    // proxyHeaders: true,
-    // proxy: true,
-    // baseURL: process.env.NODE_ENV !== "production" ? "1" : "2"
+    // baseURL: process.env.API_URL || 'http://193.34.211.46:30003/core/api/',
+    proxy: true,
+    proxyHeaders: true,
+    changeOrigin: true
+    /**
+        requestInterceptor: (config, { store }) => {
+          if (store.state.auth.token) {
+            config.headers.common.authorization = `Token ${store.state.auth
+              .token}`;
+          }
+          return config;
+        },
+        responseInterceptor: (response, ctx) => {
+          // global.console.log(ctx);
+          return response;
+        }
+    */
   },
 
-  /*
+  // https://accidental.dev/avoid-api-communication-headaches-by-using-a-proxy/
   proxy: {
     '/proxy/': {
-      target: '193.34.211.46:30003', //'http://moslab.neurotrend.ru/core/api/',
-      pathRewrite: {'^/proxy/': ''},
+      target: 'http://193.34.211.46:30003/core/api/', //'http://moslab.neurotrend.ru/core/api/',
+      pathRewrite: { '^/proxy/': '' },
       changeOrigin: true
       // prependPath: false
     }
   },
-  */
 
   /*
   auth: {

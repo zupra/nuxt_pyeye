@@ -28,7 +28,7 @@
       <Button type="warning" @click="logout">logout</Button>
     </Menu>
 
-    <Menu id="layout_sidebar" active-name="1-2" :open-names="['1']">
+    <Menu id="layout_sidebar" active-name="1-2" :open-names="['2']">
       <Submenu name="1">
         <template slot="title">
           <Icon type="ios-analytics" />Navigation One

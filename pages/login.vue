@@ -73,7 +73,7 @@ export default {
       // this.$router.push('/')
 
       try {
-        const { token } = await this.$axios.$post('/login/', this.User)
+        const { token } = await this.$axios.$post('/proxy/login/', this.User)
 
         this.$store.commit('user/LOGIN', token)
         this.$router.push('/')
