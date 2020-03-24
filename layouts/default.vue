@@ -1,5 +1,6 @@
 <template>
   <div id="layout">
+    <!-- topNav -->
     <Menu id="layout_topNav" mode="horizontal" active-name="1" theme="dark">
       <MenuItem name="1">
         <Icon type="ios-paper" />MenuItem
@@ -26,53 +27,42 @@
       </MenuItem>
 
       <Button type="warning" @click="logout">logout</Button>
+      <!-- <Button type="warning" to="http://193.34.211.46:30003/admin">admin</Button> -->
     </Menu>
 
-    <Menu id="layout_sidebar" active-name="1-2" :open-names="['2']">
+    <!-- SIDEBAR -->
+    <Menu id="layout_sidebar" active-name="1-1" :open-names="['1']">
       <Submenu name="1">
         <template slot="title">
-          <Icon type="ios-analytics" />Navigation One
+          <Icon type="ios-analytics" />Новый проект
         </template>
-        <MenuGroup title="Item 1">
-          <MenuItem name="1-1">Option 1</MenuItem>
-          <MenuItem name="1-2">Option 2</MenuItem>
-        </MenuGroup>
-        <MenuGroup title="Item 2">
-          <MenuItem name="1-3">Option 3</MenuItem>
-          <MenuItem name="1-4">Option 4</MenuItem>
-        </MenuGroup>
+
+        <MenuItem v-for="(It,idx) in linksNewPr" :to="It.link" :name="`1-${idx+1}`">{{It.name}}</MenuItem>
       </Submenu>
+
       <Submenu name="2">
         <template slot="title">
-          <Icon type="ios-filing" />Navigation Two
+          <Icon type="ios-filing" />Текущие проекты
         </template>
-        <MenuItem name="2-1">Option 5</MenuItem>
-        <MenuItem name="2-2">Option 6</MenuItem>
-        <Submenu name="3">
-          <template slot="title">Submenu</template>
-          <MenuItem name="3-1">Option 7</MenuItem>
-          <MenuItem name="3-2">Option 8</MenuItem>
-        </Submenu>
+        <MenuItem name="2-1" to="/current_projects">Список</MenuItem>
       </Submenu>
-      <Submenu name="4">
+
+      <Submenu name="3">
         <template slot="title">
-          <Icon type="ios-cog" />Navigation Three
+          <Icon type="ios-cog" />Прошедшие проекты
         </template>
-        <MenuItem name="4-1">Option 9</MenuItem>
-        <MenuItem name="4-2">Option 10</MenuItem>
-        <MenuItem name="4-3">Option 11</MenuItem>
-        <MenuItem name="4-4">Option 12</MenuItem>
+        <MenuItem name="3-1" to="/past_projects">Список</MenuItem>
       </Submenu>
     </Menu>
 
     <div id="layout_main">
+      <!-- Breadcrumb -->
       <Breadcrumb :style="{margin: '10px 0 20px'}">
         <BreadcrumbItem>
           <N-link to="/">
             <Icon type="ios-home" size="24" />Home PROJECT's
           </N-link>
         </BreadcrumbItem>
-        <!-- <BreadcrumbItem>Components</BreadcrumbItem> -->
       </Breadcrumb>
 
       <nuxt />
@@ -87,6 +77,34 @@
 export default {
   // middleware: ['auth'],
   middleware: ['login'],
+
+  data() {
+    return {
+      linksNewPr: [
+        {
+          name: 'Основное',
+          link: '/new_project'
+        },
+        {
+          name: 'Стимулы',
+          link: '/new_project/stimulus'
+        },
+        {
+          name: 'Целевая аудитория',
+          link: '/new_project/targetPeople'
+        },
+        {
+          name: 'Лаборатория',
+          link: '/new_project/laboratory'
+        },
+        {
+          name: 'Респонденты',
+          link: '/new_project/respondent'
+        }
+      ]
+    }
+  },
+
   methods: {
     logout() {
       this.$store.commit('user/LOGOUT')
@@ -135,6 +153,14 @@ export default {
 #layout_footer {
   grid-area: footer;
   background: #f8f8f8;
+  padding: 1em;
+}
+
+pre {
+  height: 10em;
+  overflow-y: auto;
+  resize: vertical;
+  background: rgba(45, 140, 240, 0.2);
   padding: 1em;
 }
 </style>

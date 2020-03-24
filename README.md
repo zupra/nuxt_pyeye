@@ -1,10 +1,10 @@
 # nuxt_pyeye
 
-> My kickass Nuxt.js project
+> Nuxt.js project based on UI Toolkit [View UI](https://www.iviewui.com/)
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 $ yarn install
 

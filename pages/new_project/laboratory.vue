@@ -3,6 +3,9 @@
     <Steps />
 
     <h1>Список лабораторий с их загрузкой на определенное время вперед</h1>
+
+    <pre>ЛАБОРАТОРИИ:{{laboratoryList}}</pre>
+
     <h2>Резервирование времени в лаборатории</h2>
 
     <Button
@@ -82,6 +85,13 @@ export default {
     Steps,
     FullCalendar
   },
+  async asyncData({ app }) {
+    const { results } = await app.$axios.$get('/proxy/laboratory/')
+    return {
+      laboratoryList: results
+    }
+  },
+
   data() {
     return {
       // eventModal: false,
