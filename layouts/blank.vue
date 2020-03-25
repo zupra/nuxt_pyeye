@@ -1,15 +1,20 @@
-<template>
-  <div>
+<template lang="pug">
+#blankArea
+  #blankArea_centered
     <nuxt />
-  </div>
 </template>
 
-
 <script>
-export default {};
+export default {}
 </script>
 
-
-
 <style>
+#blankArea {
+  height: 100vh;
+  display: flex;
+}
+
+#blankArea_centered {
+  margin: auto;
+}
 </style>

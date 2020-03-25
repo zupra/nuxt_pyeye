@@ -1,4 +1,13 @@
+export default function({ $axios }) {
+  // Django CSRF configuration
+  $axios.onRequest((config) => {
+    config.xsrfCookieName = 'csrftoken'
+    config.xsrfHeaderName = 'X-CSRFToken'
+  })
+}
+
 // Authorization
+/*
 export default function({ $axios, store }) {
   $axios.onRequest((config) => {
     if (store.state.user.token) {
@@ -8,6 +17,7 @@ export default function({ $axios, store }) {
     }
   })
 }
+*/
 
 /*
 export default function ({ $axios }) {

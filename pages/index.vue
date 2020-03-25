@@ -17,10 +17,10 @@ export default {
   async asyncData({ app }) {
     try {
       let [Laboratory, Experiment, Data] = await Promise.all([
-        app.$axios.$get('/proxy/laboratory/'),
-        app.$axios.$get('/proxy/experiment/'),
-        app.$axios.$get('/proxy/data/?page=2')
-        // app.$axios.$get('/proxy/respondent/?page=2')
+        app.$axios.$get('/laboratory/'),
+        app.$axios.$get('/experiment/'),
+        app.$axios.$get('/data/?page=2')
+        // app.$axios.$get('/respondent/?page=2')
       ])
 
       return {

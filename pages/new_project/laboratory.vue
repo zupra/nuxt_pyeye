@@ -86,7 +86,7 @@ export default {
     FullCalendar
   },
   async asyncData({ app }) {
-    const { results } = await app.$axios.$get('/proxy/laboratory/')
+    const { results } = await app.$axios.$get('/laboratory/')
     return {
       laboratoryList: results
     }

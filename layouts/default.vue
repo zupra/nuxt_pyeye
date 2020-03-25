@@ -75,8 +75,9 @@
 
 <script>
 export default {
+  middleware: 'auth',
   // middleware: ['auth'],
-  middleware: ['login'],
+  // middleware: ['login'],
 
   data() {
     return {
@@ -107,7 +108,10 @@ export default {
 
   methods: {
     logout() {
-      this.$store.commit('user/LOGOUT')
+      // this.$store.commit('user/LOGOUT')
+      // this.$router.push('/login')
+
+      this.$auth.logout()
       this.$router.push('/login')
     }
   }

@@ -1,3 +1,6 @@
+const isDev = process.env.NODE_ENV !== 'production'
+console.log('isDev', isDev)
+
 export default {
   mode: 'spa',
   /*
@@ -51,7 +54,7 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    // '@nuxtjs/auth',
+    '@nuxtjs/auth',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv'
   ],
@@ -68,10 +71,8 @@ export default {
 
   axios: {
     withCredentials: true,
-    // baseURL: process.env.API_URL || 'http://193.34.211.46:30003/core/api/',
-    proxy: true,
-    proxyHeaders: true,
-    changeOrigin: true
+    baseURL: isDev ? `${process.env.API_URL}proxy/` : process.env.API_URL,
+    proxy: isDev
     /**
         requestInterceptor: (config, { store }) => {
           if (store.state.auth.token) {
@@ -90,32 +91,37 @@ export default {
   // https://accidental.dev/avoid-api-communication-headaches-by-using-a-proxy/
   proxy: {
     '/proxy/': {
-      target: 'http://193.34.211.46:30003/core/api/', //'http://moslab.neurotrend.ru/core/api/',
+      target: process.env.API_URL,
       pathRewrite: { '^/proxy/': '' },
-      changeOrigin: true
+      changeOrigin: true,
+      proxyHeaders: true
       // prependPath: false
     }
   },
 
-  /*
+  /**/
   auth: {
+    fetchUserOnLogin: true,
     strategies: {
       local: {
         endpoints: {
           login: {
-            url: '/login/',
+            url: isDev ? '/proxy/login/' : '/login/',
             method: 'post',
             propertyName: 'token'
           },
           user: false,
           logout: false
         },
-        tokenType: 'Token'
-        // tokenName: 'Authorization'
+        tokenType: 'Token',
+        tokenName: 'Authorization'
       }
     }
+    // redirect: {
+    //   login: '/login',
+    //   home: '/'
+    // }
   },
-  */
 
   /*
    ** Build configuration

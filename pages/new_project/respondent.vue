@@ -157,7 +157,7 @@ export default {
   async asyncData({ app }) {
     const [Randomuser, Respondent] = await Promise.all([
       app.$axios.$get('https://randomuser.me/api/?results=60'),
-      app.$axios.$get('/proxy/respondent/?page=2')
+      app.$axios.$get('/respondent/?page=2')
     ])
     return {
       Users: Randomuser.results,
