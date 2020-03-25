@@ -1,3 +1,10 @@
+.idea/
+node_modules/
+front/bundles/
+package-lock.json
+VERSION
+*diff*
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template
 # Logs

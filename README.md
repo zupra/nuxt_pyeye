@@ -1,6 +1,14 @@
 # nuxt_pyeye
 
-> Nuxt.js project based on UI Toolkit [View UI](https://www.iviewui.com/)
+## Install
+
+# Install node.js 12
+sudo apt-get install curl
+curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
+sudo apt-get install -y nodejs
+
+# Install yarn
+sudo npm install yarn
 
 ## Build Setup
 
