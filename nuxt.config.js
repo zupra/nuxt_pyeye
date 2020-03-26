@@ -1,3 +1,6 @@
+const env = require('dotenv').config()
+console.log(env)
+
 const isDev = process.env.NODE_ENV !== 'production'
 console.log('isDev', isDev)
 
@@ -52,7 +55,6 @@ export default {
    ** Nuxt.js modules
    */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     // Doc: https://github.com/nuxt-community/dotenv-module
@@ -60,18 +62,13 @@ export default {
   ],
   /*
    ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
+   Doc https://axios.nuxtjs.org/options
+   https://github.com/klesarev/axios-rus-docs/tree/master/docs
    */
-
-  /**
-  
-  SessionAuthentication with Nuxt and Django-Rest-Framework
-  https://stackoverflow.com/questions/57059548/how-to-use-sessionauthentication-with-nuxt-and-django-rest-framework
-  */
-
   axios: {
     withCredentials: true,
-    baseURL: isDev ? `${process.env.API_URL}proxy/` : process.env.API_URL,
+    baseURL: process.env.API_URL, // isDev ? `${process.env.API_URL}proxy/` : process.env.API_URL,
+    browserBaseURL: 'http://localhost:3000/proxy/',
     proxy: isDev
     /**
         requestInterceptor: (config, { store }) => {
@@ -88,7 +85,7 @@ export default {
     */
   },
 
-  // https://accidental.dev/avoid-api-communication-headaches-by-using-a-proxy/
+  /**/
   proxy: {
     '/proxy/': {
       target: process.env.API_URL,
@@ -106,7 +103,7 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: isDev ? '/proxy/login/' : '/login/',
+            url: '/proxy/login/',
             method: 'post',
             propertyName: 'token'
           },
