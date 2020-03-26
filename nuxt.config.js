@@ -27,7 +27,7 @@ export default {
    */
   loading: {
     color: '#26a69a',
-    height: '5px'
+    height: '6px'
   },
   /*
    ** Global CSS
@@ -67,8 +67,8 @@ export default {
    */
   axios: {
     withCredentials: true,
-    baseURL: process.env.API_URL, // isDev ? `${process.env.API_URL}proxy/` : process.env.API_URL,
-    browserBaseURL: 'http://localhost:3000/proxy/',
+    baseURL: process.env.API_URL,
+    browserBaseURL: isDev && 'http://localhost:3000/proxy/',
     proxy: isDev
     /**
         requestInterceptor: (config, { store }) => {
@@ -103,7 +103,7 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: '/proxy/login/',
+            url: '/login/',
             method: 'post',
             propertyName: 'token'
           },

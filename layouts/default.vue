@@ -1,34 +1,29 @@
 <template>
   <div id="layout">
     <!-- topNav -->
-    <Menu id="layout_topNav" mode="horizontal" active-name="1" theme="dark">
-      <MenuItem name="1">
-        <Icon type="ios-paper" />MenuItem
-      </MenuItem>
-      <MenuItem name="2">
-        <Icon type="ios-people" />MenuItem
-      </MenuItem>
-      <Submenu name="3">
-        <template slot="title">
-          <Icon type="ios-stats" />MenuItem
-        </template>
-        <MenuGroup title="title">
-          <MenuItem name="3-1">MenuItem</MenuItem>
-          <MenuItem name="3-2">MenuItem</MenuItem>
-          <MenuItem name="3-3">MenuItem</MenuItem>
-        </MenuGroup>
-        <MenuGroup title="title">
-          <MenuItem name="3-4">MenuItem</MenuItem>
-          <MenuItem name="3-5">MenuItem</MenuItem>
-        </MenuGroup>
-      </Submenu>
-      <MenuItem name="4">
-        <Icon type="ios-construct" />MenuItem
-      </MenuItem>
-
-      <Button type="warning" @click="logout">logout</Button>
+    <div id="layout_topNav" class="flex y_center x_sb">
+      <Menu mode="horizontal" theme="dark">
+        <MenuItem name="4" to="/">
+          <Icon type="ios-home" size="24" />PROJECT's
+        </MenuItem>
+        <Submenu name="3">
+          <template slot="title">
+            <Icon type="ios-stats" />MenuItem
+          </template>
+          <MenuGroup title="title">
+            <MenuItem name="3-1">MenuItem</MenuItem>
+            <MenuItem name="3-2">MenuItem</MenuItem>
+            <MenuItem name="3-3">MenuItem</MenuItem>
+          </MenuGroup>
+          <MenuGroup title="title">
+            <MenuItem name="3-4">MenuItem</MenuItem>
+            <MenuItem name="3-5">MenuItem</MenuItem>
+          </MenuGroup>
+        </Submenu>
+      </Menu>
+      <Button class="mr-3" type="warning" @click="logout">logout</Button>
       <!-- <Button type="warning" to="http://193.34.211.46:30003/admin">admin</Button> -->
-    </Menu>
+    </div>
 
     <!-- SIDEBAR -->
     <Menu id="layout_sidebar" active-name="1-1" :open-names="['1']">
@@ -57,13 +52,15 @@
 
     <div id="layout_main">
       <!-- Breadcrumb -->
-      <Breadcrumb :style="{margin: '10px 0 20px'}">
+      <!-- 
+      <Breadcrumb :style="{margin: '10px 0'}">
         <BreadcrumbItem>
           <N-link to="/">
-            <Icon type="ios-home" size="24" />Home PROJECT's
+            <Icon type="ios-home" size="24" />PROJECT's
           </N-link>
         </BreadcrumbItem>
-      </Breadcrumb>
+      </Breadcrumb> 
+      -->
 
       <nuxt />
     </div>
@@ -143,6 +140,7 @@ export default {
 #layout_topNav {
   grid-area: header;
   overflow: visible;
+  background: #515a6e;
 }
 
 #layout_sidebar {
