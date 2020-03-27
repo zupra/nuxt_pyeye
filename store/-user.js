@@ -24,7 +24,7 @@ export const actions = {
         // }
       )
 
-      // const data = await this.$axios.$get('/laboratory/')
+      // const data = await this.$axios.$get('/core/api/laboratory/')
 
       commit('LOGIN', token)
       this.$router.push('/')

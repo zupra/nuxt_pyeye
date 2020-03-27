@@ -21,8 +21,12 @@
           </MenuGroup>
         </Submenu>
       </Menu>
-      <Button class="mr-3" type="warning" @click="logout">logout</Button>
-      <!-- <Button type="warning" to="http://193.34.211.46:30003/admin">admin</Button> -->
+
+      <div class="flex y_center">
+        <Slider v-model="timer" style="width:3em" :min="1000" :max="600 * 1000"></Slider>
+        <Button class="mx-3" type="warning" @click="logout">logout</Button>
+        <Button class="mr-3" type="warning" @click="reRender()">reRender</Button>
+      </div>
     </div>
 
     <!-- SIDEBAR -->
@@ -72,12 +76,15 @@
 
 <script>
 export default {
-  middleware: 'auth',
-  // middleware: ['auth'],
   // middleware: ['login'],
+  // middleware: 'auth',
+  middleware: ['auth', 'summary-update'],
 
   data() {
     return {
+      polling: null,
+      timer: 4000,
+
       linksNewPr: [
         {
           name: 'Основное',
@@ -110,7 +117,42 @@ export default {
 
       this.$auth.logout()
       this.$router.push('/login')
+    },
+    reRender() {
+      // this.$forceUpdate()
+      location.reload(true)
+    },
+
+    pollData() {
+      this.polling = setInterval(() => {
+        this.$Notice.open({
+          title: 'Обновить приложуху',
+          desc: '',
+          render: (h) => {
+            return h(
+              'Button',
+              {
+                on: {
+                  click: this.onClick
+                }
+              },
+              'update'
+            )
+          }
+          // duration: 0
+        })
+      }, this.timer)
+    },
+    onClick() {
+      // alert('reRnder')
+      this.reRender()
     }
+  },
+  created() {
+    this.pollData()
+  },
+  beforeDestroy() {
+    clearInterval(this.polling)
   }
 }
 </script>

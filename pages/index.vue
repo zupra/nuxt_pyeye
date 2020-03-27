@@ -88,14 +88,21 @@ section
             @click="GET('report')"
           ) получить Отчеты
           pre ОТЧЕТЫ:{{report}}
+
+        .GRID_item
+          Button(
+            @click="getForm"
+          ) получить Анкеты
+          pre forms:{{forms}}
+          pre form_resp:{{form_resp}}
 </template>
 <script>
 export default {
   async asyncData({ app }) {
     try {
       let [Laboratory, Experiment] = await Promise.all([
-        app.$axios.$get('/laboratory/'),
-        app.$axios.$get('/experiment/')
+        app.$axios.$get('/core/api/laboratory/'),
+        app.$axios.$get('/core/api/experiment/')
       ])
       return {
         laboratory: Laboratory.results,
@@ -116,6 +123,9 @@ export default {
       group: null,
       data: null,
       report: null,
+      // анкеты
+      forms: null,
+      form_resp: null,
       links: [
         {
           name: 'Прошедшие проекты',
@@ -142,6 +152,8 @@ export default {
       this.group = null
       this.data = null
       this.report = null
+      this.forms = null
+      this.form_resp = null
     },
     experiment_id(val) {
       this.$Message.info(`Выбран эксперимент ID:${val}`)
@@ -151,6 +163,8 @@ export default {
       this.group = null
       this.data = null
       this.report = null
+      this.forms = null
+      this.form_resp = null
     }
   },
   computed: {
@@ -163,11 +177,25 @@ export default {
   methods: {
     async GET(wtf) {
       const { results } = await this.$axios.$get(
-        `/${wtf}/?experiment__laboratory=${this.laboratory_id}&experiment=${this.experiment_id}`
+        `/core/api/${wtf}/?experiment__laboratory=${this.laboratory_id}&experiment=${this.experiment_id}`
       )
       this[wtf] = results
       this.$Notice.open({
         title: `запрос ${wtf}`,
+        desc: 'Успешно'
+      })
+    },
+    async getForm() {
+      const { results: forms } = await this.$axios.$get(
+        `/forms/api/form/?experiment=${this.experiment_id}&limit=1000&`
+      )
+      const { data: form_resp } = await this.$axios.$get(
+        `/forms/api/form_resp/?experiment=${this.experiment_id}&`
+      )
+      this.forms = forms
+      this.form_resp = form_resp
+      this.$Notice.open({
+        title: `запрос form`,
         desc: 'Успешно'
       })
     }

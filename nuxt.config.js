@@ -98,12 +98,12 @@ export default {
 
   /**/
   auth: {
-    fetchUserOnLogin: true,
+    // fetchUserOnLogin: true,
     strategies: {
       local: {
         endpoints: {
           login: {
-            url: '/login/',
+            url: '/core/api/login/',
             method: 'post',
             propertyName: 'token'
           },
