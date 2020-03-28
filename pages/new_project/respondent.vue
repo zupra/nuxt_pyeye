@@ -112,6 +112,7 @@
       </div>
     </div>
 
+    <!-- 
     <div class="flex_wr">
       <Card class="m-2" v-for="User in Users">
         <div class="User">
@@ -137,14 +138,8 @@
         </div>
       </Card>
     </div>
-
-    <!-- <table>
-    <tr v-for="user in Users">
-      <td v-for="It in user"><pre>{{It}}</pre></td>
-    </tr>
-    </table>-->
-
     <pre>{{$data}}</pre>
+    -->
   </div>
 </template>
 
@@ -155,12 +150,12 @@ export default {
     Steps
   },
   async asyncData({ app }) {
-    const [Randomuser, Respondent] = await Promise.all([
-      app.$axios.$get('https://randomuser.me/api/?results=60'),
+    const [Respondent] = await Promise.all([
+      // app.$axios.$get('https://randomuser.me/api/?results=60'),
       app.$axios.$get('/core/api/respondent/?page=2')
     ])
     return {
-      Users: Randomuser.results,
+      // Users: Randomuser.results,
       Respondent
     }
   },

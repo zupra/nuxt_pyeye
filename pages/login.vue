@@ -67,6 +67,7 @@ export default {
         await this.$auth.loginWith('local', {
           data: { ...this.User }
         })
+        this.$router.push('/')
       } catch ({ response }) {
         this.$Modal.error({
           title: response.data.status,

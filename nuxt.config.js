@@ -5,7 +5,19 @@ const isDev = process.env.NODE_ENV !== 'production'
 console.log('isDev', isDev)
 
 export default {
-  mode: 'spa',
+  mode: 'spa', //'universal',
+
+  env: {
+    APP_VERSION: +new Date(),
+    /*
+    API_URL:
+      process.env.NODE_ENV === 'dev'
+        ? 'http://193.34.211.46:30003/'
+        : 'http://pyeye-portal.ru:30003/',
+    */
+  },
+  // Content-Security-Policy
+  // https://stackoverflow.com/questions/34852682/refused-to-load-the-script-because-it-violates-the-following-content-security-po
   /*
    ** Headers of the page
    */
@@ -17,31 +29,31 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
-      }
+        content: process.env.npm_package_description || '',
+      },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
   /*
    ** Customize the progress-bar color
    */
   loading: {
     color: '#26a69a',
-    height: '6px'
+    height: '6px',
   },
   /*
    ** Global CSS
    */
   css: [
     'iview/dist/styles/iview.css',
-    { src: '~assets/main.styl', lang: 'stylus' }
+    { src: '~assets/main.styl', lang: 'stylus' },
   ],
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
     '@/plugins/iview',
-    '~/plugins/axios'
+    '~/plugins/axios',
     // {src: '~/plugins/full-calendar.js', ssr: false}
   ],
   /*
@@ -58,7 +70,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
   ],
   /*
    ** Axios module configuration
@@ -69,7 +81,7 @@ export default {
     withCredentials: true,
     baseURL: process.env.API_URL,
     browserBaseURL: isDev && 'http://localhost:3000/proxy/',
-    proxy: isDev
+    proxy: isDev,
     /**
         requestInterceptor: (config, { store }) => {
           if (store.state.auth.token) {
@@ -91,9 +103,9 @@ export default {
       target: process.env.API_URL,
       pathRewrite: { '^/proxy/': '' },
       changeOrigin: true,
-      proxyHeaders: true
+      proxyHeaders: true,
       // prependPath: false
-    }
+    },
   },
 
   /**/
@@ -105,19 +117,15 @@ export default {
           login: {
             url: '/core/api/login/',
             method: 'post',
-            propertyName: 'token'
+            propertyName: 'token',
           },
           user: false,
-          logout: false
+          logout: false,
         },
         tokenType: 'Token',
-        tokenName: 'Authorization'
-      }
-    }
-    // redirect: {
-    //   login: '/login',
-    //   home: '/'
-    // }
+        tokenName: 'Authorization',
+      },
+    },
   },
 
   /*
@@ -127,7 +135,7 @@ export default {
     filenames: {
       app: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
       chunk: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
-      css: ({ isDev }) => (isDev ? '[name].css' : 'css/[contenthash].css')
+      css: ({ isDev }) => (isDev ? '[name].css' : 'css/[contenthash].css'),
       // img: ({ isDev }) => isDev ? '[path][name].[ext]' : 'img/[contenthash:7].[ext]',
       // font: ({ isDev }) => isDev ? '[path][name].[ext]' : 'fonts/[contenthash:7].[ext]',
       // video: ({ isDev }) => isDev ? '[path][name].[ext]' : 'videos/[contenthash:7].[ext]'
@@ -136,6 +144,6 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
-  }
+    extend(config, ctx) {},
+  },
 }

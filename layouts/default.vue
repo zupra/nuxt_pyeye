@@ -23,7 +23,7 @@
       </Menu>
 
       <div class="flex y_center">
-        <Slider v-model="timer" style="width:3em" :min="1000" :max="600 * 1000"></Slider>
+        <!-- <Slider v-model="timer" style="width:3em" :min="1000" :max="600 * 1000"></Slider> -->
         <Button class="mx-3" type="warning" @click="logout">logout</Button>
         <Button class="mr-3" type="warning" @click="reRender()">reRender</Button>
       </div>
@@ -36,14 +36,35 @@
           <Icon type="ios-analytics" />Новый проект
         </template>
 
-        <MenuItem v-for="(It,idx) in linksNewPr" :to="It.link" :name="`1-${idx+1}`">{{It.name}}</MenuItem>
+        <MenuItem
+          v-for="(It, idx) in linksNewProject"
+          :to="It.link"
+          :name="`1-${idx + 1}`"
+        >{{ It.name }}</MenuItem>
       </Submenu>
 
       <Submenu name="2">
         <template slot="title">
           <Icon type="ios-filing" />Текущие проекты
         </template>
-        <MenuItem name="2-1" to="/current_projects">Список</MenuItem>
+        <MenuItem name="2-1" to="/current_projects">CURRENT</MenuItem>
+        <MenuItem
+          v-for="(It, idx) in [
+            'Лаборатории',
+            'Эксперименты',
+            'Анкеты',
+            'Стимулы',
+            'Визиоряды',
+            'Респонденты',
+            'Группы',
+            'Данные',
+            'Отчеты',
+            'Зоны интереса',
+            'Графики',
+          ]"
+          to="/#"
+          :name="`2-${idx + 2}`"
+        >{{ It }}</MenuItem>
       </Submenu>
 
       <Submenu name="3">
@@ -73,43 +94,67 @@
   </div>
 </template>
 
-
 <script>
+const linksNewProject = [
+  {
+    name: 'Основное',
+    link: '/new_project',
+  },
+  {
+    name: 'Стимулы',
+    link: '/new_project/stimulus',
+  },
+  {
+    name: 'Целевая аудитория',
+    link: '/new_project/targetPeople',
+  },
+  {
+    name: 'Лаборатория',
+    link: '/new_project/laboratory',
+  },
+  {
+    name: 'Респонденты',
+    link: '/new_project/respondent',
+  },
+]
+
+const linksCurrentProjects = [
+  { name: 'Лаборатории', link: '/current_projects/laboratory' },
+  { name: 'Эксперименты', link: '/current_projects/experiment' },
+  { name: 'Анкеты', link: '/current_projects/form' },
+  { name: 'Стимулы', link: '/current_projects/stimul' },
+  { name: 'Визиоряды', link: '/current_projects/sausage' },
+  { name: 'Респонденты', link: '/current_projects/respondent' },
+  { name: 'Группы', link: '/current_projects/group' },
+  { name: 'Данные', link: '/current_projects/data' },
+  { name: 'Отчеты', link: '/current_projects/report' },
+  { name: 'Зоны интереса', link: '/current_projects/zoneinterest' },
+  { name: 'Графики', link: '/current_projects/charts' },
+]
+
+
+import { mapState } from 'vuex';
 export default {
-  // middleware: ['login'],
-  // middleware: 'auth',
+  // middleware: ['login'],'auth',
   middleware: ['auth', 'summary-update'],
 
   data() {
     return {
+      APP_VERSION: process.env.APP_VERSION,
       polling: null,
-      timer: 4000,
+      timer: 1000 * 600,
 
-      linksNewPr: [
-        {
-          name: 'Основное',
-          link: '/new_project'
-        },
-        {
-          name: 'Стимулы',
-          link: '/new_project/stimulus'
-        },
-        {
-          name: 'Целевая аудитория',
-          link: '/new_project/targetPeople'
-        },
-        {
-          name: 'Лаборатория',
-          link: '/new_project/laboratory'
-        },
-        {
-          name: 'Респонденты',
-          link: '/new_project/respondent'
-        }
-      ]
+      linksNewProject: linksNewProject,
+      linksCurrentProjects: linksCurrentProjects,
     }
   },
 
+  computed: mapState(['status']),
+  watch: {
+    VAR1(oldVal, newVal) {
+      console.log(`Updating from ${oldVal} to ${newVal}`);
+    },
+  },
   methods: {
     logout() {
       // this.$store.commit('user/LOGOUT')
@@ -125,39 +170,44 @@ export default {
 
     pollData() {
       this.polling = setInterval(() => {
-        this.$Notice.open({
-          title: 'Обновить приложуху',
-          desc: '',
-          render: (h) => {
-            return h(
-              'Button',
-              {
-                on: {
-                  click: this.onClick
-                }
-              },
-              'update'
-            )
-          }
-          // duration: 0
-        })
+        this.renderNotice()
       }, this.timer)
     },
+    renderNotice() {
+      this.$Notice.open({
+        title: 'Актуальность данных устарела',
+        desc: '',
+        render: (h) => {
+          return h(
+            'Button',
+            {
+              props: {
+                type: 'primary',
+              },
+              on: {
+                click: this.onClick,
+              },
+            },
+            'Обновить приложение'
+          )
+        }
+        // duration: 0
+      })
+    },
     onClick() {
-      // alert('reRnder')
       this.reRender()
-    }
+      this.logout()
+    },
   },
   created() {
     this.pollData()
+    console.log(process.env.APP_VERSION)
   },
   beforeDestroy() {
     clearInterval(this.polling)
-  }
+  },
 }
 </script>
-
-
 
 <style>
 #layout {
@@ -192,6 +242,7 @@ export default {
 #layout_main {
   grid-area: main;
   padding: 1em 2em;
+  position: relative;
 }
 
 #layout_footer {

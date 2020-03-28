@@ -11,7 +11,7 @@ export const mutations = {
 export const actions = {
   async get({ commit }) {
     try {
-      const { data } = await this.$axios.$get('/core/api/summary/')
+      const data = await this.$axios.$get('/core/api/summary/')
       commit('SET_SUMMARY', data)
     } catch ({ response }) {
       console.table(response.data)

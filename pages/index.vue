@@ -99,17 +99,13 @@ section
 <script>
 export default {
   async asyncData({ app }) {
-    try {
-      let [Laboratory, Experiment] = await Promise.all([
-        app.$axios.$get('/core/api/laboratory/'),
-        app.$axios.$get('/core/api/experiment/')
-      ])
-      return {
-        laboratory: Laboratory.results,
-        experiment: Experiment.results
-      }
-    } catch ({ response }) {
-      console.table(response.data.detail)
+    let [Laboratory, Experiment] = await Promise.all([
+      app.$axios.$get('/core/api/laboratory/'),
+      app.$axios.$get('/core/api/experiment/')
+    ])
+    return {
+      laboratory: Laboratory.results,
+      experiment: Experiment.results
     }
   },
 
