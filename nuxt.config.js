@@ -54,6 +54,7 @@ export default {
   plugins: [
     '@/plugins/iview',
     '~/plugins/axios',
+    '~/plugins/i18n',
     // {src: '~/plugins/full-calendar.js', ssr: false}
   ],
   /*
@@ -71,7 +72,30 @@ export default {
     '@nuxtjs/auth',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
+    // 'nuxt-i18n',
   ],
+
+  /*
+  i18n: {
+    locales: [
+      {
+        name: 'Russian',
+        code: 'ru',
+        iso: 'ru-RU',
+        file: 'ru.json',
+      },
+      {
+        name: 'English',
+        code: 'en',
+        iso: 'en-US',
+        file: 'en.json',
+      },
+    ],
+    // lazy: true,
+    langDir: '/lang/',
+  },
+  */
+
   /*
    ** Axios module configuration
    Doc https://axios.nuxtjs.org/options
@@ -132,6 +156,7 @@ export default {
    ** Build configuration
    */
   build: {
+    /*
     filenames: {
       app: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
       chunk: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
@@ -140,6 +165,7 @@ export default {
       // font: ({ isDev }) => isDev ? '[path][name].[ext]' : 'fonts/[contenthash:7].[ext]',
       // video: ({ isDev }) => isDev ? '[path][name].[ext]' : 'videos/[contenthash:7].[ext]'
     },
+    */
 
     /*
      ** You can extend webpack config here

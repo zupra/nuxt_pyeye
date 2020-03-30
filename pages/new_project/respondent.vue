@@ -6,14 +6,14 @@
     <pre>РЕСПОНДЕНТЫ:{{Respondent}}</pre>
     {{TD}}
     <!-- 
-    <template v-for="It in Respondent.results">
+    <template v-for="(It,idx) in Respondent.results">
       <dl v-for="(Val,Key) in It">
         <dt>{{Key}}</dt>
         <dd>{{Val}}</dd>
       </dl>
     </template>
     <table v-if="Respondent">
-      <tr v-for="It in Respondent.results">
+      <tr v-for="(It,idx) in Respondent.results">
         <td v-for="td in Object.keys(It[0])">{{td}}</td>
       </tr>
       <tr></tr>
@@ -28,25 +28,25 @@
             <div>
               <p>Эксперимент</p>
               <Select placeholder="Эксперимент">
-                <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+                <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
               </Select>
             </div>
             <div class="ml-5">
               <p>Визиоряд</p>
               <Select placeholder="Визиоряд">
-                <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+                <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
               </Select>
             </div>
             <div class="ml-5">
               <p>Ведущий глаз</p>
               <Select placeholder="Ведущий глаз">
-                <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+                <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
               </Select>
             </div>
             <div class="ml-5">
               <p>Ведущая рука</p>
               <Select placeholder="Ведущая рука">
-                <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+                <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
               </Select>
             </div>
           </div>
@@ -55,7 +55,7 @@
             <div>
               <p>Пол</p>
               <Select placeholder="Пол">
-                <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+                <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
               </Select>
             </div>
 
@@ -84,21 +84,21 @@
       <div>
         <p>Пол</p>
         <Select placeholder="Пол">
-          <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+          <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
         </Select>
       </div>
 
       <div class="ml-4">
         <p>Ведущий глаз</p>
         <Select placeholder="Ведущий глаз">
-          <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+          <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
         </Select>
       </div>
 
       <div class="ml-4">
         <p>Ведущая рука</p>
         <Select placeholder="Ведущая рука">
-          <Option v-for="It in [1,2,3]" :value="It">{{It}}</Option>
+          <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
         </Select>
       </div>
 

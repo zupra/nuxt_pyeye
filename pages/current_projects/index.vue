@@ -6,7 +6,7 @@ section
   RadioGroup(v-model="laboratory_id" type="button")
     Radio(
       size="large"
-      v-for="It in laboratory"
+      v-for="(It,idx) in laboratory"
       :label="It.id"
     ) {{It.name}}
 

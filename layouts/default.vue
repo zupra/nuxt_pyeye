@@ -3,23 +3,24 @@
     <!-- topNav -->
     <div id="layout_topNav" class="flex y_center x_sb">
       <Menu mode="horizontal" theme="dark">
-        <MenuItem name="4" to="/">
+        <MenuItem name="1" to="/">
           <Icon type="ios-home" size="24" />PROJECT's
         </MenuItem>
-        <Submenu name="3">
+        <Submenu name="2">
           <template slot="title">
             <Icon type="ios-stats" />MenuItem
           </template>
           <MenuGroup title="title">
-            <MenuItem name="3-1">MenuItem</MenuItem>
-            <MenuItem name="3-2">MenuItem</MenuItem>
-            <MenuItem name="3-3">MenuItem</MenuItem>
+            <MenuItem name="2-1">MenuItem</MenuItem>
+            <MenuItem name="2-2">MenuItem</MenuItem>
+            <MenuItem name="2-3">MenuItem</MenuItem>
           </MenuGroup>
           <MenuGroup title="title">
-            <MenuItem name="3-4">MenuItem</MenuItem>
-            <MenuItem name="3-5">MenuItem</MenuItem>
+            <MenuItem name="2-4">MenuItem</MenuItem>
+            <MenuItem name="2-5">MenuItem</MenuItem>
           </MenuGroup>
         </Submenu>
+        <MenuItem name="3" to="/translations">Переводы</MenuItem>
       </Menu>
 
       <div class="flex y_center">
@@ -38,6 +39,7 @@
 
         <MenuItem
           v-for="(It, idx) in linksNewProject"
+          :key="idx"
           :to="It.link"
           :name="`1-${idx + 1}`"
         >{{ It.name }}</MenuItem>
@@ -62,6 +64,7 @@
             'Зоны интереса',
             'Графики',
           ]"
+          :key="idx"
           to="/#"
           :name="`2-${idx + 2}`"
         >{{ It }}</MenuItem>
@@ -90,7 +93,11 @@
       <nuxt />
     </div>
 
-    <footer id="layout_footer">© footer</footer>
+    <footer id="layout_footer">
+      © footer
+      <Button @click="changeLanguage('en')">EN</Button>
+      <Button @click="changeLanguage('ru')">RU</Button>
+    </footer>
   </div>
 </template>
 
@@ -151,11 +158,14 @@ export default {
 
   computed: mapState(['status']),
   watch: {
-    VAR1(oldVal, newVal) {
-      console.log(`Updating from ${oldVal} to ${newVal}`);
-    },
+    // VAR1(oldVal, newVal) {
+    //   console.log(`Updating from ${oldVal} to ${newVal}`);
+    // },
   },
   methods: {
+    changeLanguage(lang) {  
+      this.$i18n.locale = lang;
+    },
     logout() {
       // this.$store.commit('user/LOGOUT')
       // this.$router.push('/login')
@@ -201,8 +211,14 @@ export default {
   },
   created() {
     this.pollData()
-    console.log(process.env.APP_VERSION)
+    
+    // if(!localStorage.APP_VERSION) localStorage.APP_VERSION = process.env.APP_VERSION
+    // if(localStorage.APP_VERSION && localStorage.APP_VERSION !== process.env.APP_VERSION) {
+    //   alert('new APP')
+    //   // this.reRender() 
+    // }
   },
+  // updated() {},
   beforeDestroy() {
     clearInterval(this.polling)
   },

@@ -24,52 +24,48 @@
     <center>
       <h2 class="mb-3">Выбор типа стимула</h2>
 
-      <div style="width:40em">
+      <div style="width: 40em;">
         <Button
+          v-for="(It, idx) in stimulus"
+          :key="idx"
           class="m-1"
-          v-for="(It,idx) in stimulus"
           shape="circle"
           @click="selectedList.push(It)"
-        >{{It}}</Button>
+        >{{ It }}</Button>
       </div>
     </center>
 
-
-
-    <Collapse class="mt-5" v-if="selectedList.length">
-      <Panel v-for="(item,idx) in selectedList" :name="String(idx+1)">
-        <b>{{item}}</b>
-        <Button
-          color="gold"
-          class="ml-5"
-          @click.stop="selectedList.splice(idx,1)"
-        >Удалить</Button>
+    <Collapse v-if="selectedList.length" class="mt-5">
+      <Panel v-for="(item, idx) in selectedList" :key="idx" :name="String(idx + 1)">
+        <b>{{ item }}</b>
+        <Button color="gold" class="ml-5" @click.stop="selectedList.splice(idx, 1)">Удалить</Button>
         <div slot="content">
-          <h3>Настройки {{item}}</h3>
-          <p>Какие-то настройки  ...</p>
+          <h3>Настройки {{ item }}</h3>
+          <p>Какие-то настройки ...</p>
         </div>
       </Panel>
     </Collapse>
 
-
-
-    <br><br><br><br>
+    <br />
+    <br />
+    <br />
+    <br />
     <Divider class="mt-5">ИЛИ ТАКОЙ ВАРИАНТ</Divider>
     <Collapse>
-      <Panel v-for="(item,idx) in LIST" :name="String(idx+1)">
-        Исследуемый стимул_{{idx+1}}
+      <Panel v-for="(item, idx) in LIST" :key="idx" :name="String(idx + 1)">
+        Исследуемый стимул_{{ idx + 1 }}
         <Button
-          v-if="idx>=1"
+          v-if="idx >= 1"
           class="ml-5"
           type="error"
           ghost
-          @click.stop="LIST.splice(idx,1)"
+          @click.stop="LIST.splice(idx, 1)"
         >Удалить</Button>
         <div slot="content">
           <h2>Настраиваем тип стимула</h2>
 
-          <Select placeholder="типа стимула" style="width:16em">
-            <Option v-for="It in stimulus" :value="It">{{It}}</Option>
+          <Select placeholder="типа стимула" style="width: 16em;">
+            <Option v-for="(It, _idx) in stimulus" :key="_idx" :value="It">{{ It }}</Option>
           </Select>
 
           <br />
@@ -80,7 +76,7 @@
       </Panel>
     </Collapse>
 
-    <Button class="mt-4" type="dashed" @click="LIST.push({})" icon="md-add">Добавить стимул</Button>
+    <Button class="mt-4" type="dashed" icon="md-add" @click="LIST.push({})">Добавить стимул</Button>
   </section>
 </template>
 
@@ -88,7 +84,7 @@
 import Steps from '~/components/new_project/steps'
 export default {
   components: {
-    Steps
+    Steps,
   },
   data() {
     return {
@@ -109,13 +105,12 @@ export default {
         'Сайт',
         'Компьютерная игра',
         'Мобильное приложениe',
-        'Вне лаборатории'
+        'Вне лаборатории',
       ],
-      stimul: null
+      stimul: null,
     }
-  }
+  },
 }
 </script>
 
-<style>
-</style>
+<style></style>

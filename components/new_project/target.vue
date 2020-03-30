@@ -16,7 +16,7 @@
       <div class="ml-5">
         <b>Пол</b>
         <Select placeholder="Пол">
-          <Option v-for="It in ['Мужской','Женский','Любой']" :value="It">{{It}}</Option>
+          <Option v-for="(It,idx) in ['Мужской','Женский','Любой']" :key="idx" :value="It">{{It}}</Option>
         </Select>
       </div>
 
@@ -35,7 +35,7 @@
       <b>Образование</b>
       <span>(множественный выбор)</span>
       <Select placeholder="Образование" filterable multiple>
-        <Option v-for="item in education" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        <Option v-for="(item,idx) in education" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
     </div>
 
@@ -80,14 +80,14 @@
       </div>
       <!-- <span>Валюта</span>
     <Select placeholder="Валюта" style="width:3em">
-      <Option v-for="It in ['₽','$','€']">{{It}}</Option>
+      <Option v-for="(It,idx) in ['₽','$','€']">{{It}}</Option>
       </Select>-->
     </div>
     <div class="flex">
       <div>
         <b>По самооценке</b>
         <Select placeholder="По шкале 1-5">
-          <Option v-for="It in [1,2,3,4,5]" :value="It">{{It}}</Option>
+          <Option v-for="(It,idx) in [1,2,3,4,5]" :key="idx" :value="It">{{It}}</Option>
         </Select>
       </div>
     </div>
@@ -103,7 +103,7 @@
       <div>
         <b>По самооценке</b>
         <Select placeholder="По шкале 1-5">
-          <Option v-for="It in [1,2,3,4,5]" :value="It">{{It}}</Option>
+          <Option v-for="(It,idx) in [1,2,3,4,5]" :key="idx" :value="It">{{It}}</Option>
         </Select>
       </div>
     </div>

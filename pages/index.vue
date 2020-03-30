@@ -2,6 +2,7 @@
 
 section
   center
+    h1 {{ $t('min_answer_count') }}
     h1 Главная страница
     p.mb-4 Пользователь выбирает работу (3 пути)
   .flex.x_center.center
@@ -15,7 +16,7 @@ section
   RadioGroup(v-model="laboratory_id" type="button")
     Radio(
       size="large"
-      v-for="It in laboratory"
+      v-for="(It,idx) in laboratory"
       :label="It.id"
     ) {{It.name}}
 

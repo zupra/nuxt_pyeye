@@ -6,7 +6,7 @@
 
 
     <Collapse>
-        <Panel v-for="(item,idx) in LIST" :name="String(idx+1)">
+        <Panel v-for="(item,idx) in LIST" :key="idx" :name="String(idx+1)">
             Настроить ЦА_{{idx+1}} <Button v-if="idx>=1" class="ml-5" type="error" ghost @click.stop="LIST.splice(idx,1)">Удалить</Button>
             <div slot="content">
               <Target />

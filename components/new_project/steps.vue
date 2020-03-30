@@ -5,7 +5,7 @@
     <center>
       <p class="mb-3">Пока что «условно» разделим на:</p>
 
-      <N-link class="step mr-3" v-for="It in links" :to="`${It.link}`">{{It.name}}</N-link>
+      <N-link class="step mr-3" v-for="(It,idx) in links" :key="idx" :to="`${It.link}`">{{It.name}}</N-link>
     </center>
 
     <Divider />
