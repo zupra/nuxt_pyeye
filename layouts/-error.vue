@@ -10,7 +10,8 @@
       <div v-else>
         <h1>{{error.statusCode}}</h1>
         <h2>{{error.message}}</h2>
-        <nuxt-link to="/">На главную</nuxt-link>
+        <!-- <nuxt-link to="/">На главную</nuxt-link> -->
+        <Button type="primary" @click="reRender()">Обновить</Button>
       </div>
     </div>
   </div>
@@ -26,7 +27,10 @@ export default {
     logout() {
       this.$auth.logout()
       this.$router.push('/login')
-    }
+    },
+    reRender() {
+      location.reload(true)
+    },
   }
 }
 </script>

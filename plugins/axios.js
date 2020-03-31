@@ -1,8 +1,16 @@
-export default function({ $axios, error, $auth }) {
+export default function ({ $axios, redirect, app }) {
   // Django CSRF configuration
   $axios.onRequest((config) => {
     config.xsrfCookieName = 'csrftoken'
     config.xsrfHeaderName = 'X-CSRFToken'
+  })
+
+  $axios.onError((error) => {
+    const code = parseInt(error.response && error.response.status)
+    if (code === 401 || code === 403) {
+      redirect('/login')
+      app.$auth.logout()
+    }
   })
 
   /*
@@ -13,13 +21,14 @@ export default function({ $axios, error, $auth }) {
     switch (statusCode) {
       case 401:
       case 403:
-        $auth.logout()
+        redirect('/login')
+        app.$auth.logout()
         break
 
       default:
         error({
           statusCode,
-          message
+          message,
         })
     }
   })

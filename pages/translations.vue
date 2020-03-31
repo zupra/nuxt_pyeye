@@ -1,99 +1,158 @@
 <template lang="pug">
 section
 
-  //- pre compile_texts:{{compile_texts}}
+  h2.center Создать фразу
 
-
-  h2 Создать фразу
-  Table(
-    border 
-    :columns="columns" 
-    :data="newItem"
+  //- b {{newItem_langId}}
+  Tabs(
+    :animated='false',
+    type="card"
+    @on-click="newItem_langId = $event+1"
   )
-    template(slot-scope='{ row }', slot='name')
-      Input(v-model='row.name')
-    template(slot-scope='{ row }', slot='ru')
-      Input(v-model='row.ru')
-    template(slot-scope='{ row }', slot='en')
-      Input(v-model='row.en')
-    template(slot-scope='{ row, index }', slot='action')
-      Button(type='primary') Создать
-    table(border='', :columns='columns', :data='newItem')
+    TabPane(
+      v-for="lang in LANG"
+      :label='lang.code'
+    ) 
+      Table(
+        border 
+        :columns="columns_newItem" 
+        :data="newItem"
+      )
+        template(slot-scope='{ row }', slot='mnemonic')
+          Input(v-model='row.mnemonic')
+        template(slot-scope='{ row }', slot='text')
+          Input(v-model='row.text')
+        template(slot-scope='{ row, index }', slot='action')
+          Button(
+            type='primary'
+            @click="ADD(row)"
+          ) Создать
 
-  .mt-4.mb-3
-    h2 Список фраз
+
+  .mt-5.mb-3
+    h2.center Список фраз
     Input(
       placeholder="фильтр"
       v-model="keyword"
     )
-  Table(
-    border 
-    :columns="columns" 
-    :data="filteredData"
+  //- b {{langId}}
+  Tabs(
+    :animated='false',
+    type="card"
+    @on-click="langId = $event+1"
   )
-    template(slot-scope='{ row }', slot='name')
-      Input(v-model='row.name')
-    template(slot-scope='{ row }', slot='ru')
-      Input(v-model='row.ru')
-    template(slot-scope='{ row }', slot='en')
-      Input(v-model='row.en')
-    template(slot-scope='{ row, index }', slot='action')
-      Button(type='primary') Сохранить
+    TabPane(
+      v-for="lang in LANG"
+      :label='lang.code'
+    ) 
+      Table(
+        border 
+        :columns="columns" 
+        :data="langTable"
+      )
+        template(slot-scope='{ row }', slot='mnemonic')
+          Input(v-model='row.mnemonic')
+        template(slot-scope='{ row }', slot='text')
+          Input(v-model='row.text')
+        template(slot-scope='{ row, index }', slot='action')
+          .flex
+            Button.mr-1(
+              type='primary'
+              size="small"
+              @click="PUT(row)"
+            ) Изменить
+            Button(
+              type='error'
+              size="small"
+              @click="DELETE(row.id)"
+            ) Удалить
 
 
 </template>
 
 <script>
+class NewItem {
+  constructor() {
+    this.mnemonic = ''
+    this.text = ''
+  }
+}
+
+const columns_newItem = [
+  {
+    title: 'Mnemonic',
+    slot: 'mnemonic',
+  },
+  {
+    title: 'Text',
+    slot: 'text',
+  },
+  {
+    title: 'Action',
+    slot: 'action',
+    width: 190,
+    align: 'center',
+  },
+]
+
+const columns = [
+  {
+    title: 'Mnemonic',
+    slot: 'mnemonic',
+    sortable: true,
+  },
+  {
+    title: 'Text',
+    slot: 'text',
+    sortable: true,
+  },
+  {
+    title: 'Action',
+    slot: 'action',
+    width: 190,
+    align: 'center',
+  },
+]
+
+const LANG = [
+  { id: 1, code: 'RU' },
+  { id: 2, code: 'EN' },
+]
+
 export default {
   async asyncData({ app }) {
-    let [Text, TextList] = await Promise.all([
-      app.$axios.$get('/core/api/compile_texts/'),
-      app.$axios.$get('/core/api/ftext/'),
+    const [RuLang, EnLang, Lang] = await Promise.all([
+      app.$axios.$get('/core/api/ftext/?language=1'),
+      app.$axios.$get('/core/api/ftext/?language=2'),
+      app.$axios.$get('/core/api/language/'),
     ])
     return {
-      compile_texts: Text,
-      ftext: TextList.results,
+      RU: RuLang.results,
+      EN: EnLang.results,
+      language: Lang.results,
     }
   },
 
   data() {
     return {
       keyword: '',
-      columns: [
-        {
-          title: 'Мнемоника',
-          slot: 'name',
-        },
-        {
-          title: 'RU',
-          slot: 'ru',
-        },
-        {
-          title: 'EN',
-          slot: 'en',
-        },
-        {
-          title: 'Action',
-          slot: 'action',
-          width: 150,
-          align: 'center',
-        },
-      ],
-      newItem: [
-        {
-          mnemonic: '',
-          ru: '',
-          en: '',
-        },
-      ],
-      data: Array.from({ length: 33 }, (v, i) => ({
-        name: `name_${i + 1}`,
-        ru: `RU_${i + 1}`,
-        en: `EN_${i + 1}`,
-      })),
+      newItem: [new NewItem()],
+      newItem_langId: 1,
+      langId: 1,
+      LANG,
+      columns_newItem,
+      columns,
+      // data: Array.from({ length: 10 }, (v, i) => ({
+      //   mnemonic: `mnemonic_${i + 1}`,
+      //   text: `TXT_${i + 1}`
+      // })),
     }
   },
   computed: {
+    langTable() {
+      return this.langId === 1 ? this.RU : this.EN
+    },
+    /**/
     filteredData() {
       return this.data.filter((o) =>
         Object.keys(o).some((k) =>
@@ -102,7 +161,37 @@ export default {
       )
     },
   },
-  methods: {},
+  methods: {
+    async ADD(obj) {
+      const data = await this.$axios.$post('/core/api/ftext/', {
+        ...obj,
+        language: this.newItem_langId,
+      })
+
+      this.newItem = [new NewItem()] // reset newItem
+      this.UPDATE(this.newItem_langId)
+      this.$Message.info('Добавлено')
+    },
+    async UPDATE(lang) {
+      const { results } = await this.$axios.$get(
+        `/core/api/ftext/?language=${lang}`
+      )
+      lang === 1 ? (this.RU = results) : (this.EN = results)
+    },
+    async DELETE(id) {
+      const { results } = await this.$axios.$delete(`/core/api/ftext/${id}/`)
+      this.UPDATE(this.newItem_langId)
+      this.$Message.info('Удалено')
+    },
+    async PUT(data) {
+      const { results } = await this.$axios.$put(
+        `/core/api/ftext/${data.id}/`,
+        { ...data, language: this.newItem_langId }
+      )
+      this.UPDATE(this.newItem_langId)
+      this.$Message.info('Обновлено')
+    },
+  },
 }
 </script>
 

@@ -34,7 +34,8 @@
     <Menu id="layout_sidebar" active-name="1-1" :open-names="['1']">
       <Submenu name="1">
         <template slot="title">
-          <Icon type="ios-analytics" />Новый проект
+          <!-- <Icon type="ios-analytics" /> -->
+          <Icon type="ios-color-palette-outline" size="24" />Новый проект
         </template>
 
         <MenuItem
@@ -47,7 +48,8 @@
 
       <Submenu name="2">
         <template slot="title">
-          <Icon type="ios-filing" />Текущие проекты
+          <!-- <Icon type="ios-filing" /> -->
+          <Icon type="ios-clipboard-outline" size="24" />Текущие проекты
         </template>
         <MenuItem name="2-1" to="/current_projects">CURRENT</MenuItem>
         <MenuItem
@@ -72,7 +74,8 @@
 
       <Submenu name="3">
         <template slot="title">
-          <Icon type="ios-cog" />Прошедшие проекты
+          <!-- <Icon type="ios-cog" /> -->
+          <Icon type="ios-archive-outline" size="24" />Прошедшие проекты
         </template>
         <MenuItem name="3-1" to="/past_projects">Список</MenuItem>
       </Submenu>
@@ -93,10 +96,12 @@
       <nuxt />
     </div>
 
-    <footer id="layout_footer">
-      © footer
-      <Button @click="changeLanguage('en')">EN</Button>
-      <Button @click="changeLanguage('ru')">RU</Button>
+    <footer id="layout_footer" class="flex y_center x_sb">
+      © footer V({{new Date(APP_VERSION).toLocaleString()}})
+      <div>
+        <Button @click="changeLanguage('en')">EN</Button>
+        <Button @click="changeLanguage('ru')">RU</Button>
+      </div>
     </footer>
   </div>
 </template>
@@ -158,8 +163,8 @@ export default {
 
   computed: mapState(['status']),
   watch: {
-    // VAR1(oldVal, newVal) {
-    //   console.log(`Updating from ${oldVal} to ${newVal}`);
+    // APP_VERSION(oldVal, newVal) {
+    //   // console.log(`Updating from ${oldVal} to ${newVal}`);
     // },
   },
   methods: {
@@ -212,11 +217,13 @@ export default {
   created() {
     this.pollData()
     
-    // if(!localStorage.APP_VERSION) localStorage.APP_VERSION = process.env.APP_VERSION
-    // if(localStorage.APP_VERSION && localStorage.APP_VERSION !== process.env.APP_VERSION) {
-    //   alert('new APP')
-    //   // this.reRender() 
-    // }
+    if(!localStorage.APP_VERSION) localStorage.APP_VERSION = process.env.APP_VERSION
+    if(localStorage.APP_VERSION && localStorage.APP_VERSION !== process.env.APP_VERSION) {
+      // alert('new APP')
+      console.error('reRender')
+      // this.reRender()
+      localStorage.APP_VERSION = process.env.APP_VERSION
+    }
   },
   // updated() {},
   beforeDestroy() {
@@ -265,6 +272,7 @@ export default {
   grid-area: footer;
   background: #f8f8f8;
   padding: 1em;
+  border-top: 1px solid #e3e5e8;
 }
 
 pre {
