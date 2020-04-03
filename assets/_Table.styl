@@ -1,0 +1,66 @@
+.table-responsive
+  width 100%
+  overflow-x auto
+
+$border = #dee2e6
+
+table
+  width 100%
+  border-collapse collapse
+  background #FFF
+  // border 1px solid $border
+  table-layout: fixed;
+
+// tr
+//   border-bottom 1px solid $border
+
+th
+  text-align left
+
+thead
+  border-bottom 3px solid $border
+
+td, th
+  padding .3em
+
+.td_buttonGroup
+  width 1%
+
+// ======
+.table_col
+  td, th
+    border-right 1px solid $border
+    &:last-child
+      border-right 0
+
+// ======
+.table_distance
+  td, th
+    padding 1em 1.5em
+
+// ======
+.table_striped
+  // tbody tr:nth-of-type(odd)
+  // background-color: rgba(0,0,0,.05);
+  tr
+    &:nth-child(even)
+      background ghostwhite
+
+// ======
+.table_hovered
+  tr:hover
+    background lavender // cornflowerblue
+
+// ======
+.table_grid
+  td, th
+    border-right 1px solid $border
+    &:last-child
+      border-right 0
+  tr:last-child
+    border-bottom 0
+
+// ======
+.border
+  td, th
+    border 1px solid $border

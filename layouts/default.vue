@@ -21,6 +21,7 @@
           </MenuGroup>
         </Submenu>
         <MenuItem name="3" to="/translations">Переводы</MenuItem>
+        <MenuItem name="4" to="/translations2">Переводы2</MenuItem>
       </Menu>
 
       <div class="flex y_center">
