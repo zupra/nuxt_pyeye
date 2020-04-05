@@ -5,7 +5,7 @@ const isDev = process.env.NODE_ENV !== 'production'
 console.log('isDev', isDev)
 
 export default {
-  mode: 'spa', //'universal',
+  mode: 'spa', // 'universal',
 
   env: {
     APP_VERSION: +new Date(),
@@ -55,6 +55,7 @@ export default {
     '@/plugins/iview',
     '~/plugins/axios',
     '~/plugins/i18n',
+    '~/plugins/vuex-persist',
     // {src: '~/plugins/full-calendar.js', ssr: false}
   ],
   /*
@@ -62,13 +63,14 @@ export default {
    */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    // '@nuxtjs/eslint-module'
+    // '@nuxtjs/eslint-module',
   ],
   /*
    ** Nuxt.js modules
    */
   modules: [
     '@nuxtjs/axios',
+    // https://dev.auth.nuxtjs.org/
     '@nuxtjs/auth',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
@@ -134,7 +136,6 @@ export default {
 
   /**/
   auth: {
-    // fetchUserOnLogin: true,
     strategies: {
       local: {
         endpoints: {

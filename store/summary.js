@@ -1,11 +1,11 @@
 export const state = () => ({
-  summary: null
+  summary: null,
 })
 
 export const mutations = {
   SET_SUMMARY(state, summary) {
     state.summary = summary
-  }
+  },
 }
 
 export const actions = {
@@ -16,5 +16,5 @@ export const actions = {
     } catch ({ response }) {
       console.table(response.data)
     }
-  }
+  },
 }

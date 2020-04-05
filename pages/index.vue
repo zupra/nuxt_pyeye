@@ -2,7 +2,9 @@
 
 section
   center
+
     h1 {{ $t('min_answer_count') }}
+  
     h1 Главная страница
     p.mb-4 Пользователь выбирает работу (3 пути)
   .flex.x_center.center
@@ -100,13 +102,13 @@ section
 <script>
 export default {
   async asyncData({ app }) {
-    let [Laboratory, Experiment] = await Promise.all([
+    const [Laboratory, Experiment] = await Promise.all([
       app.$axios.$get('/core/api/laboratory/'),
-      app.$axios.$get('/core/api/experiment/')
+      app.$axios.$get('/core/api/experiment/'),
     ])
     return {
       laboratory: Laboratory.results,
-      experiment: Experiment.results
+      experiment: Experiment.results,
     }
   },
 
@@ -126,18 +128,25 @@ export default {
       links: [
         {
           name: 'Прошедшие проекты',
-          link: 'past_projects'
+          link: 'past_projects',
         },
         {
           name: 'Текущие проекты',
-          link: 'current_projects'
+          link: 'current_projects',
         },
         {
           name: 'Начать новый проект',
-          link: 'new_project'
-        }
-      ]
+          link: 'new_project',
+        },
+      ],
     }
+  },
+  computed: {
+    experimentByLab() {
+      return this.experiment.filter(
+        (item) => item.laboratory === this.laboratory_id
+      )
+    },
   },
   watch: {
     laboratory_id(val) {
@@ -162,14 +171,7 @@ export default {
       this.report = null
       this.forms = null
       this.form_resp = null
-    }
-  },
-  computed: {
-    experimentByLab() {
-      return this.experiment.filter(
-        (item) => item.laboratory === this.laboratory_id
-      )
-    }
+    },
   },
   methods: {
     async GET(wtf) {
@@ -179,7 +181,7 @@ export default {
       this[wtf] = results
       this.$Notice.open({
         title: `запрос ${wtf}`,
-        desc: 'Успешно'
+        desc: 'Успешно',
       })
     },
     async getForm() {
@@ -193,39 +195,43 @@ export default {
       this.form_resp = form_resp
       this.$Notice.open({
         title: `запрос form`,
-        desc: 'Успешно'
+        desc: 'Успешно',
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
-
 <style lang="stylus">
-.ivu-collapse
-  user-select none
+.ivu-collapse {
+  user-select: none;
+}
 
-.CIRCLE
-  background #EEE
-  border-radius 50%
-  height 120px
-  width 120px
-  font-size 1.4em
-  line-height 1
-  padding 2.2em 0 0
+.CIRCLE {
+  background: #EEE;
+  border-radius: 50%;
+  height: 120px;
+  width: 120px;
+  font-size: 1.4em;
+  line-height: 1;
+  padding: 2.2em 0 0;
+}
 
-.SCROLL
-  height 200px
-  overflow-y auto
-  resize vertical
-  background rgba(45, 140, 240, .2)
-  padding 1em
+.SCROLL {
+  height: 200px;
+  overflow-y: auto;
+  resize: vertical;
+  background: rgba(45, 140, 240, 0.2);
+  padding: 1em;
+}
 
-.GRID
-  display grid
-  grid-template-columns 1fr 1fr
-  grid-gap 1rem 2rem
+.GRID {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem 2rem;
 
-  &_item
-    overflow auto
+  &_item {
+    overflow: auto;
+  }
+}
 </style>

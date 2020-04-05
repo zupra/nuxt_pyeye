@@ -1,198 +1,329 @@
 <template lang="pug">
 section
 
-  h2.center Создать фразу
 
-  //- b {{newItem_langId}}
-  Tabs(
-    :animated='false',
-    type="card"
-    @on-click="newItem_langId = $event+1"
-  )
-    TabPane(
-      v-for="lang in LANG"
-      :label='lang.code'
+  //- pre {{ITEM}}
+
+  p {{ $t('_save') }}
+  p {{ $t('_new') }}
+  
+
+  
+  .flex.x_sb
+    //- тригер isNewItem/item
+    .text_x2.bold(
+      v-if="isNewItem"
+    ) {{$t('_new')}} wtf_Текст
+    //- {{ $t('text') }}
+    .text_x2.flex(
+      v-else
     ) 
-      Table(
-        border 
-        :columns="columns_newItem" 
-        :data="newItem"
+      Button.mr-2(
+        size="small"
+        type="success"
+        @click="ITEM = itemMaker()"
+      ) {{$t('_new')}} Text
+      | mnemonic:
+      b {{ITEM[0].mnemonic}}
+
+    //- 
+    Button.ml_auto(
+      :disabled="!ITEM.some(It => It.text)"
+      size="small"
+      type="info"
+      @click="resetITEM()"
+    ) {{ $t('clear_texts') }}
+  
+  //- форма
+  .flex.mb-2.y_end
+    .m-1
+      b Мнемоника
+      Input(
+        placeholder='mnemonic'
+        v-model='ITEM[0].mnemonic'
+        @on-input-change="mnemonicChange($event)"
       )
-        template(slot-scope='{ row }', slot='mnemonic')
-          Input(v-model='row.mnemonic')
-        template(slot-scope='{ row }', slot='text')
-          Input(v-model='row.text')
-        template(slot-scope='{ row, index }', slot='action')
-          Button(
-            type='primary'
-            @click="ADD(row)"
-          ) Создать
-
-
-  .mt-5.mb-3
-    h2.center Список фраз
-    Input(
-      placeholder="фильтр"
-      v-model="keyword"
+    .m-1(
+      v-for="It in ITEM"
     )
-  //- b {{langId}}
-  Tabs(
-    :animated='false',
-    type="card"
-    @on-click="langId = $event+1"
-  )
-    TabPane(
-      v-for="lang in LANG"
-      :label='lang.code'
-    ) 
-      Table(
-        border 
-        :columns="columns" 
-        :data="langTable"
+      b {{mapLang(It.language)}}
+      Input(
+        v-model='It.text'
       )
-        template(slot-scope='{ row }', slot='mnemonic')
-          Input(v-model='row.mnemonic')
-        template(slot-scope='{ row }', slot='text')
-          Input(v-model='row.text')
-        template(slot-scope='{ row, index }', slot='action')
-          .flex
-            Button.mr-1(
-              type='primary'
-              size="small"
-              @click="PUT(row)"
-            ) Изменить
-            Button(
-              type='error'
-              size="small"
-              @click="DELETE(row.id)"
-            ) Удалить
+    //- 
+    Button.m-1(
+      :disabled="!(ITEM[0].mnemonic && ITEM.some(It => It.text))"
+      :type="isNewItem ? 'success':'warning'"
+      @click="isNewItem ? ADD() : PUT()"
+    ) {{isNewItem ? 'Добавить':'Изменить'}}
+
+
+  //- фильтр/сортировка
+  .my-1
+    //- {{ $t('list_of_phrases') }}
+    h3.center Список фраз
+    .flex
+      Dropdown
+        Button 
+          | sort by: &nbsp;
+          icon(type='ios-arrow-down')
+        DropdownMenu(
+          slot='list'
+        )
+          DropdownItem(
+            v-for="It in ['text','language','mnemonic']"
+            @click.native="UPDATE(It)"
+          ) {{It}}
+      Input.mx-1(
+        placeholder="фильтр"
+        v-model="keyword"
+        @on-enter="CHANGE()"
+      )
+      Button(
+        :disabled="keyword.length < 2"
+        type='primary'
+        @click="CHANGE()"
+      ) {{ $t('search') }}
+      Button.ml-1(
+         :disabled="!keyword"
+        type="warning"
+        @click="UPDATE()"
+      ) {{$t('reset')}} {{ $t('search') }}
+
+
+
+
+
+
+
+  Table#custom_Table(
+    border
+    :loading="loading"
+    :columns="columns" 
+    :data="Text"
+    @on-row-click="get_ITEM($event.mnemonic)"
+  )
+    template(slot-scope='{ row }', slot='language')
+      span(v-text="mapLang(row.language)")
+    template(slot-scope='{ row }', slot='text')
+      Input(v-model='row.text')
+    template(slot-scope='{ row, index }', slot='action')
+      Button(
+        type='primary'
+        size="small"
+        @click.stop="PUT(row)"
+      ) Сохранить
+      //- {{ $t('save') }}
+
+  .flex.y_center.x_sb.m-3
+
+    Button(
+      type='primary'
+      @click="compile_texts()"
+    ) wtf_Сохранить
+    // {{ $t('_save') }}
+    
+
+    Page(
+      :total='paging_totalCount', 
+      :current='pageParams.page', 
+      @on-change='changePage'
+    )
+
 
 
 </template>
 
 <script>
-class NewItem {
-  constructor() {
-    this.mnemonic = ''
-    this.text = ''
-  }
-}
-
-const columns_newItem = [
-  {
-    title: 'Mnemonic',
-    slot: 'mnemonic',
-  },
-  {
-    title: 'Text',
-    slot: 'text',
-  },
-  {
-    title: 'Action',
-    slot: 'action',
-    width: 190,
-    align: 'center',
-  },
-]
-
 const columns = [
   {
-    title: 'Mnemonic',
-    slot: 'mnemonic',
-    sortable: true,
+    title: 'Мнемоника',
+    key: 'mnemonic',
+    width: 140,
+    // sortable: true,
   },
   {
-    title: 'Text',
+    title: 'Язык',
+    slot: 'language',
+    width: 100,
+  },
+  {
+    title: 'Значение',
     slot: 'text',
-    sortable: true,
   },
   {
     title: 'Action',
     slot: 'action',
-    width: 190,
+    width: 120,
     align: 'center',
   },
 ]
 
-const LANG = [
-  { id: 1, code: 'RU' },
-  { id: 2, code: 'EN' },
-]
-
+// &limit=10
 export default {
-  async asyncData({ app }) {
-    const [RuLang, EnLang, Lang] = await Promise.all([
-      app.$axios.$get('/core/api/ftext/?language=1'),
-      app.$axios.$get('/core/api/ftext/?language=2'),
+  async asyncData({ app }, limit = 10) {
+    const [Text, Lang] = await Promise.all([
+      app.$axios.$get(`/core/api/ftext/?ordering=mnemonic${'&limit=' + limit}`),
       app.$axios.$get('/core/api/language/'),
     ])
     return {
-      RU: RuLang.results,
-      EN: EnLang.results,
-      language: Lang.results,
+      Text: Text.results,
+      paging_totalCount: Text.count,
+      Lang: Lang.results,
     }
   },
 
   data() {
     return {
+      loading: false,
       keyword: '',
-      newItem: [new NewItem()],
-      newItem_langId: 1,
-      langId: 1,
-      LANG,
-      columns_newItem,
+      ITEM: null,
       columns,
-      // data: Array.from({ length: 10 }, (v, i) => ({
-      //   mnemonic: `mnemonic_${i + 1}`,
-      //   text: `TXT_${i + 1}`
-      // })),
+
+      pageParams: {
+        limit: 10,
+        page: 1,
+      },
     }
   },
   computed: {
-    langTable() {
-      return this.langId === 1 ? this.RU : this.EN
+    isNewItem() {
+      return !this.ITEM[0].id
     },
-    /**/
-    filteredData() {
-      return this.data.filter((o) =>
-        Object.keys(o).some((k) =>
-          o[k].toLowerCase().includes(this.keyword.toLowerCase())
-        )
-      )
+    _mapLang() {
+      return this.Lang.reduce((map, obj) => {
+        map[obj.id] = obj.name
+        return map
+      }, {})
     },
   },
-  methods: {
-    async ADD(obj) {
-      const data = await this.$axios.$post('/core/api/ftext/', {
-        ...obj,
-        language: this.newItem_langId,
-      })
+  created() {
+    this.ITEM = this.itemMaker()
+  },
 
-      this.newItem = [new NewItem()] // reset newItem
-      this.UPDATE(this.newItem_langId)
-      this.$Message.info('Добавлено')
+  methods: {
+    mapLang(id) {
+      return this._mapLang[id]
     },
-    async UPDATE(lang) {
-      const { results } = await this.$axios.$get(
-        `/core/api/ftext/?language=${lang}`
-      )
-      lang === 1 ? (this.RU = results) : (this.EN = results)
+    itemMaker() {
+      return this.Lang.map((It) => ({
+        language: It.id,
+        mnemonic: '',
+        text: '',
+      }))
     },
-    async DELETE(id) {
-      const { results } = await this.$axios.$delete(`/core/api/ftext/${id}/`)
-      this.UPDATE(this.newItem_langId)
-      this.$Message.info('Удалено')
+    mnemonicChange(e) {
+      // console.log(e.target.value)
+      const val = e.target.value
+      this.ITEM.forEach((It) => (It.mnemonic = val))
     },
-    async PUT(data) {
-      const { results } = await this.$axios.$put(
-        `/core/api/ftext/${data.id}/`,
-        { ...data, language: this.newItem_langId }
-      )
-      this.UPDATE(this.newItem_langId)
+    resetITEM() {
+      for (const It of this.ITEM) {
+        It.text = ''
+      }
+    },
+    changePage(page) {
+      console.log(page)
+      this.pageParams.page = page
+      this.UPDATE()
+    },
+    // rowClassName(row, index) {},
+
+    async compile_texts() {
+      await this.$axios.$get('/core/api/compile_texts/')
       this.$Message.info('Обновлено')
     },
+    async get_ITEM(mnemonic) {
+      const { results } = await this.$axios.$get(
+        `/core/api/ftext/?mnemonic=${mnemonic}`
+      )
+      // если не было всех языков - добавляем
+      const arrA = this.Lang.map((It) => It.id)
+      const arrB = results.map((It) => It.language)
+      const needLangId = arrA.filter((x) => !arrB.includes(x))
+      const Res = needLangId.map((It) => ({
+        language: It,
+        mnemonic,
+        text: '',
+      }))
+      this.ITEM = [...results, ...Res]
+    },
+
+    async ADD() {
+      try {
+        for (const It of this.ITEM) {
+          // только те что с текстом
+          It.text && (await this.$axios.$post('/core/api/ftext/', It))
+        }
+        // this.$Message.info('Добавлено')
+        this.UPDATE()
+      } catch ({ response }) {
+        // console.dir(response)
+        this.$Message.error(JSON.stringify(response.data))
+      }
+    },
+
+    async PUT(payload) {
+      try {
+        if (payload) {
+          await this.$axios.$put(`/core/api/ftext/${payload.id}/`, payload)
+        } else {
+          for (const It of this.ITEM) {
+            // старые $put'им, новые $post'им
+            It.id && (await this.$axios.$put(`/core/api/ftext/${It.id}/`, It))
+            !It.id &&
+              It.text &&
+              (await this.$axios.$post('/core/api/ftext/', It))
+          }
+        }
+        this.$Message.info('Обновлено')
+        this.UPDATE()
+      } catch ({ response }) {
+        // console.dir(response)
+        this.$Message.error(JSON.stringify(response.data))
+      }
+    },
+
+    async UPDATE(by = 'mnemonic') {
+      this.ITEM = this.itemMaker()
+      this.loading = true
+      const { results, count } = await this.$axios.$get(
+        `/core/api/ftext/?ordering=${by}`,
+        {
+          params: this.pageParams,
+        }
+      )
+      // this.keyword = ''
+      this.paging_totalCount = count
+      this.Text = results
+      this.loading = false
+    },
+
+    async CHANGE(by = 'mnemonic') {
+      this.loading = true
+      const { results } = await this.$axios.$get(
+        `/core/api/ftext/?search=${this.keyword}&ordering=${by}`
+      )
+      this.Text = results
+      this.loading = false
+    },
+
+    /*
+    async DEL() {
+      for (const It of this.ITEM) {
+        await this.$axios.$delete(`/core/api/ftext/${It.id}/`)
+      }
+      this.$Message.info('Удалено')
+      this.UPDATE()
+    },
+    */
   },
 }
 </script>
 
-<style></style>
+<style lang="stylus">
+#custom_Table .ivu-table-body {
+  height: calc(100vh - 370px);
+  overflow-y: scroll;
+}
+</style>

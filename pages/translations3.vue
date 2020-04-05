@@ -124,30 +124,27 @@ export default {
           align: 'center',
         },
       ],
-
     }
   },
   computed: {},
   methods: {
     mapLang(id) {
       const map = {
-        1:'Русский',
-        2:'English'
+        1: 'Русский',
+        2: 'English',
       }
       return map[id]
     },
     async ADD(text, language) {
       try {
-        const data = await this.$axios.$post('/core/api/ftext/', {
+        await this.$axios.$post('/core/api/ftext/', {
           mnemonic: this.mnemonic,
           text,
           language,
         })
         this.UPDATE()
         this.$Message.info('Добавлено')
-      } catch(e) {
-
-      }
+      } catch (e) {}
     },
     UPDATE() {
       // const { results } = await this.$axios.$get(`/core/api/ftext/}`)
@@ -169,9 +166,7 @@ export default {
     // },
 
     async PUT(data) {
-      const { results } = await this.$axios.$put(
-        `/core/api/ftext/${data.id}/`, data
-      )
+      await this.$axios.$put(`/core/api/ftext/${data.id}/`, data)
       // this.UPDATE()
       this.$Message.info('Обновлено')
     },

@@ -21,13 +21,20 @@
           </MenuGroup>
         </Submenu>
         <MenuItem name="3" to="/translations">Переводы</MenuItem>
-        <MenuItem name="4" to="/translations2">Переводы2</MenuItem>
       </Menu>
 
       <div class="flex y_center">
-        <!-- <Slider v-model="timer" style="width:3em" :min="1000" :max="600 * 1000"></Slider> -->
-        <Button class="mx-3" type="warning" @click="logout">logout</Button>
-        <Button class="mr-3" type="warning" @click="reRender()">reRender</Button>
+        <Tag color="geekblue">{{ $store.state.auth.user.username }}</Tag>
+
+        <Button class="mx-3" type="warning" @click="logout()">logout</Button>
+        <Button
+          title="refresh"
+          class="mr-3"
+          type="warning"
+          shape="circle"
+          icon="md-refresh"
+          @click="reRender()"
+        ></Button>
       </div>
     </div>
 
@@ -98,7 +105,7 @@
     </div>
 
     <footer id="layout_footer" class="flex y_center x_sb">
-      © footer V({{new Date(APP_VERSION).toLocaleString()}})
+      © footer V({{ new Date(APP_VERSION).toLocaleString() }})
       <div>
         <Button @click="changeLanguage('en')">EN</Button>
         <Button @click="changeLanguage('ru')">RU</Button>
@@ -108,6 +115,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 const linksNewProject = [
   {
     name: 'Основное',
@@ -144,11 +153,8 @@ const linksCurrentProjects = [
   { name: 'Зоны интереса', link: '/current_projects/zoneinterest' },
   { name: 'Графики', link: '/current_projects/charts' },
 ]
-
-
-import { mapState } from 'vuex';
 export default {
-  // middleware: ['login'],'auth',
+  // middleware: 'auth' login,
   middleware: ['auth', 'summary-update'],
 
   data() {
@@ -157,8 +163,8 @@ export default {
       polling: null,
       timer: 1000 * 600,
 
-      linksNewProject: linksNewProject,
-      linksCurrentProjects: linksCurrentProjects,
+      linksNewProject,
+      linksCurrentProjects,
     }
   },
 
@@ -168,9 +174,29 @@ export default {
     //   // console.log(`Updating from ${oldVal} to ${newVal}`);
     // },
   },
+  created() {
+    console.log('user', this.$auth.hasScope('superuser'))
+
+    this.pollData()
+
+    if (!localStorage.APP_VERSION)
+      localStorage.APP_VERSION = process.env.APP_VERSION
+    if (
+      localStorage.APP_VERSION &&
+      localStorage.APP_VERSION !== process.env.APP_VERSION
+    ) {
+      // console.info('reRender')
+      // this.reRender()
+      localStorage.APP_VERSION = process.env.APP_VERSION
+    }
+  },
+  // updated() {},
+  beforeDestroy() {
+    clearInterval(this.polling)
+  },
   methods: {
-    changeLanguage(lang) {  
-      this.$i18n.locale = lang;
+    changeLanguage(lang) {
+      this.$i18n.locale = lang
     },
     logout() {
       // this.$store.commit('user/LOGOUT')
@@ -181,7 +207,7 @@ export default {
     },
     reRender() {
       // this.$forceUpdate()
-      location.reload(true)
+      location.reload()
     },
 
     pollData() {
@@ -206,7 +232,7 @@ export default {
             },
             'Обновить приложение'
           )
-        }
+        },
         // duration: 0
       })
     },
@@ -214,21 +240,6 @@ export default {
       this.reRender()
       this.logout()
     },
-  },
-  created() {
-    this.pollData()
-    
-    if(!localStorage.APP_VERSION) localStorage.APP_VERSION = process.env.APP_VERSION
-    if(localStorage.APP_VERSION && localStorage.APP_VERSION !== process.env.APP_VERSION) {
-      // alert('new APP')
-      console.error('reRender')
-      // this.reRender()
-      localStorage.APP_VERSION = process.env.APP_VERSION
-    }
-  },
-  // updated() {},
-  beforeDestroy() {
-    clearInterval(this.polling)
   },
 }
 </script>

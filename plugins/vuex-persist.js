@@ -5,8 +5,8 @@ export default ({ store }) => {
     new VuexPersistence({
       // options
       key: 'user',
-      modules: ['user'],
-      storage: localStorage
-    }).plugin(store);
-  });
+      modules: ['auth'],
+      storage: sessionStorage,
+    }).plugin(store)
+  })
 }

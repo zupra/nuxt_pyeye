@@ -1,4 +1,4 @@
-export default function ({ $axios, redirect, app }) {
+export default function ({ $axios, redirect, app, store }) {
   // Django CSRF configuration
   $axios.onRequest((config) => {
     config.xsrfCookieName = 'csrftoken'
@@ -9,7 +9,8 @@ export default function ({ $axios, redirect, app }) {
     const code = parseInt(error.response && error.response.status)
     if (code === 401 || code === 403) {
       redirect('/login')
-      app.$auth.logout()
+      // app.$auth.logout()
+      // store.commit('user/LOGOUT') // store.state.user.token = ''
     }
   })
 
