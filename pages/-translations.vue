@@ -119,7 +119,8 @@ section
     Button(
       type='primary'
       @click="compile_texts()"
-    ) Сохранить {{ $t('_save') }}
+    ) wtf_Сохранить
+    // {{ $t('_save') }}
     
 
     Page(
@@ -158,12 +159,10 @@ const columns = [
 ]
 // &limit=10
 export default {
-  async asyncData({ app }) {
+  async asyncData({ app }, limit = 10) {
     const [Text, Lang] = await Promise.all([
-      // app.$axios.$get(`/core/api/ftext/?ordering=mnemonic${'&limit=' + limit}`),
-      app.$API.ftext.list({ ordering: 'mnemonic', limit: 10 }),
-      // app.$axios.$get('/core/api/language/'),
-      app.$API.language.list(),
+      app.$axios.$get(`/core/api/ftext/?ordering=mnemonic${'&limit=' + limit}`),
+      app.$axios.$get('/core/api/language/'),
     ])
     return {
       Text: Text.results,
@@ -229,11 +228,13 @@ export default {
     // rowClassName(row, index) {},
 
     async compile_texts() {
-      await this.$API.compile_texts.list()
+      await this.$axios.$get('/core/api/compile_texts/')
       this.$Message.info('Обновлено')
     },
     async get_ITEM(mnemonic) {
-      const { results } = await this.$API.ftext.list({ mnemonic })
+      const { results } = await this.$axios.$get(
+        `/core/api/ftext/?mnemonic=${mnemonic}`
+      )
       // если не было всех языков - добавляем
       const arrA = this.Lang.map((It) => It.id)
       const arrB = results.map((It) => It.language)
@@ -250,8 +251,7 @@ export default {
       try {
         for (const It of this.ITEM) {
           // только те что с текстом
-          // this.$axios.$post('/core/api/ftext/', It)
-          It.text && (await this.$API.ftext.create(It))
+          It.text && (await this.$axios.$post('/core/api/ftext/', It))
         }
         // this.$Message.info('Добавлено')
         this.UPDATE()
@@ -264,46 +264,44 @@ export default {
     async PUT(payload) {
       try {
         if (payload) {
-          await this.$API.ftext.update(payload.id, payload)
+          await this.$axios.$put(`/core/api/ftext/${payload.id}/`, payload)
         } else {
           for (const It of this.ITEM) {
             // старые $put'им, новые $post'им
-            It.id && (await this.$API.ftext.update(It.id, It))
-            !It.id && It.text && (await this.$API.ftext.create(It))
+            It.id && (await this.$axios.$put(`/core/api/ftext/${It.id}/`, It))
+            !It.id &&
+              It.text &&
+              (await this.$axios.$post('/core/api/ftext/', It))
           }
         }
         this.$Message.info('Обновлено')
         this.UPDATE()
       } catch ({ response }) {
         // console.dir(response)
-        // TODO договориться о формате ошибок
         this.$Message.error(JSON.stringify(response.data))
       }
     },
 
-    async UPDATE() {
+    async UPDATE(by = 'mnemonic') {
       this.ITEM = this.itemMaker()
       this.loading = true
-
-      const { results, count } = await this.$API.ftext.list({
-        ...this.pageParams,
-        ordering: 'mnemonic',
-      })
-
+      const { results, count } = await this.$axios.$get(
+        `/core/api/ftext/?ordering=${by}`,
+        {
+          params: this.pageParams,
+        }
+      )
       // this.keyword = ''
       this.paging_totalCount = count
       this.Text = results
       this.loading = false
     },
 
-    async CHANGE() {
+    async CHANGE(by = 'mnemonic') {
       this.loading = true
-
-      const { results } = await this.$API.ftext.list({
-        search: this.keyword,
-        ordering: 'mnemonic',
-      })
-
+      const { results } = await this.$axios.$get(
+        `/core/api/ftext/?search=${this.keyword}&ordering=${by}`
+      )
       this.Text = results
       this.loading = false
     },

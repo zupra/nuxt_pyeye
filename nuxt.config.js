@@ -56,6 +56,7 @@ export default {
     '~/plugins/axios',
     '~/plugins/i18n',
     '~/plugins/vuex-persist',
+    '~/plugins/repository',
     // {src: '~/plugins/full-calendar.js', ssr: false}
   ],
   /*
@@ -84,17 +85,17 @@ export default {
         name: 'Russian',
         code: 'ru',
         iso: 'ru-RU',
-        file: 'ru.json',
+        // file: 'ru.json',
       },
       {
         name: 'English',
         code: 'en',
         iso: 'en-US',
-        file: 'en.json',
+        // file: 'en.json',
       },
     ],
-    // lazy: true,
-    langDir: '/lang/',
+    lazy: true,
+    // langDir: '/lang/',
   },
   */
 
