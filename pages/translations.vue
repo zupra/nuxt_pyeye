@@ -4,7 +4,7 @@ section
 
   //- pre {{ITEM}}
 
-  p {{ $t('_save') }} {{ $t('_new') }} {{ $t('text') }}
+  //- p {{ $t('_save') }} {{ $t('_new') }} {{ $t('text') }}
   
 
   
@@ -123,7 +123,9 @@ section
     
 
     Page(
-      :total='paging_totalCount', 
+      show-total
+      :total='paging_totalCount',
+      :page-size='pageParams.limit'
       :current='pageParams.page', 
       @on-change='changePage'
     )
@@ -156,13 +158,14 @@ const columns = [
     align: 'center',
   },
 ]
-// &limit=10
+const pageParams = {
+  limit: 100,
+  page: 1,
+}
 export default {
   async asyncData({ app }) {
     const [Text, Lang] = await Promise.all([
-      // app.$axios.$get(`/core/api/ftext/?ordering=mnemonic${'&limit=' + limit}`),
-      app.$API.ftext.list({ ordering: 'mnemonic', limit: 10 }),
-      // app.$axios.$get('/core/api/language/'),
+      app.$API.ftext.list({ ...pageParams }),
       app.$API.language.list(),
     ])
     return {
@@ -178,11 +181,8 @@ export default {
       keyword: '',
       ITEM: null,
       columns,
-
-      pageParams: {
-        limit: 10,
-        page: 1,
-      },
+      pageParams,
+      paging_totalCount: 0,
     }
   },
   computed: {
@@ -250,7 +250,6 @@ export default {
       try {
         for (const It of this.ITEM) {
           // только те что с текстом
-          // this.$axios.$post('/core/api/ftext/', It)
           It.text && (await this.$API.ftext.create(It))
         }
         // this.$Message.info('Добавлено')
@@ -289,7 +288,6 @@ export default {
         ...this.pageParams,
         ordering: 'mnemonic',
       })
-
       // this.keyword = ''
       this.paging_totalCount = count
       this.Text = results
@@ -311,7 +309,7 @@ export default {
     /*
     async DEL() {
       for (const It of this.ITEM) {
-        await this.$axios.$delete(`/core/api/ftext/${It.id}/`)
+        this.$API.ftext.delete(It.id)
       }
       this.$Message.info('Удалено')
       this.UPDATE()

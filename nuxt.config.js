@@ -131,7 +131,6 @@ export default {
       pathRewrite: { '^/proxy/': '' },
       changeOrigin: true,
       proxyHeaders: true,
-      // prependPath: false
     },
   },
 
@@ -146,10 +145,14 @@ export default {
             propertyName: 'token',
           },
           user: false,
-          logout: false,
+          logout: {
+            url: '/core/api/logout/',
+            method: 'post',
+          },
         },
         tokenType: 'Token',
         tokenName: 'Authorization',
+        tokenRequired: false,
       },
     },
   },

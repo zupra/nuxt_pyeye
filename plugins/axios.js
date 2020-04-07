@@ -8,8 +8,9 @@ export default function ({ $axios, redirect, app, store }) {
   $axios.onError((error) => {
     const code = parseInt(error.response && error.response.status)
     if (code === 401 || code === 403) {
-      redirect('/login')
       // app.$auth.logout()
+      redirect('/login')
+      return error.response
       // store.commit('user/LOGOUT') // store.state.user.token = ''
     }
   })

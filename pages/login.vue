@@ -79,7 +79,6 @@ export default {
               key: 'user',
               value: rest,
             })
-            // this.$store.commit('user/USER_DATA', data)
           })
         this.$router.push('/')
       } catch ({ response }) {
