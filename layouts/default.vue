@@ -1,121 +1,100 @@
-<template>
-  <div id="layout">
-    <!-- topNav -->
-    <div id="layout_topNav" class="flex y_center x_sb">
-      <Menu mode="horizontal" theme="dark">
-        <MenuItem name="1" to="/">
-          <Icon type="ios-home" size="24" />PROJECT's
-        </MenuItem>
-        <Submenu name="2">
-          <template slot="title">
-            <Icon type="ios-stats" />MenuItem
-          </template>
-          <MenuGroup title="title">
-            <MenuItem name="2-1">MenuItem</MenuItem>
-            <MenuItem name="2-2">MenuItem</MenuItem>
-            <MenuItem name="2-3">MenuItem</MenuItem>
-          </MenuGroup>
-          <MenuGroup title="title">
-            <MenuItem name="2-4">MenuItem</MenuItem>
-            <MenuItem name="2-5">MenuItem</MenuItem>
-          </MenuGroup>
-        </Submenu>
-        <MenuItem name="3" to="/translations">Переводы</MenuItem>
-      </Menu>
+<template lang="pug">
+#layout
 
-      <div class="flex y_center">
-        <Tag color="geekblue">{{ $store.state.auth.user.username }}</Tag>
+  //- topNav
+  #layout_topNav.flex.y_center.x_sb
+    Menu(mode='horizontal', theme='dark')
+      MenuItem(name='1', to='/')
+        Icon(type='ios-home', size='24')
+        | PROJECT's
+      Submenu(name='2')
+        template(slot='title')
+          Icon(type='ios-stats')
+          | MenuItem
+        MenuGroup(
+          title='title'
+        )
+          MenuItem(name='2-1') MenuItem
+          MenuItem(name='2-2') MenuItem
+          MenuItem(name='2-3') MenuItem
+        MenuGroup(
+          title='title'
+        )
+          MenuItem(name='2-4') MenuItem
+          MenuItem(name='2-5') MenuItem
 
-        <Button class="mx-3" type="warning" @click="logout()">logout</Button>
-        <Button
-          title="refresh"
-          class="mr-3"
-          type="warning"
-          shape="circle"
-          icon="md-refresh"
-          @click="reRender()"
-        ></Button>
-      </div>
-    </div>
+      MenuItem(name='3', to='/translations') Переводы
+    .flex.y_center
+      Poptip(
+        placement="bottom-end" width="280"
+      )
+        Button(size="small") {{ $store.state.auth.user.username }}
+        div(
+          slot="content"
+        )
+          pre {{$store.state.auth.user}}
 
-    <!-- SIDEBAR -->
-    <Menu id="layout_sidebar" active-name="1-1" :open-names="['1']">
-      <Submenu name="1">
-        <template slot="title">
-          <!-- <Icon type="ios-analytics" /> -->
-          <Icon type="ios-color-palette-outline" size="24" />Новый проект
-        </template>
 
-        <MenuItem
-          v-for="(It, idx) in linksNewProject"
-          :key="idx"
-          :to="It.link"
-          :name="`1-${idx + 1}`"
-        >{{ It.name }}</MenuItem>
-      </Submenu>
+      Button.mx-3(
+        type='warning'
+        size="small"
+        @click='logout()'
+      ) logout
+      Button.mr-3(
+        title='refresh'
+        type='warning'
+        shape='circle'
+        icon='md-refresh'
+        @click='reRender()'
+      )
+  
+  //- SIDEBAR
+  Menu#layout_sidebar(active-name='1-1', :open-names="['1']")
+    Submenu(name='1')
+      template(slot='title')
+        Icon(type='ios-color-palette-outline', size='24')
+        | Новый проект
+      MenuItem(
+        v-for='(It, idx) in linksNewProject'
+        :key='idx'
+        :to='It.link'
+        :name='`1-${idx + 1}`') {{ It.name }}
+    Submenu(name='2')
+      template(slot='title')
+        Icon(type='ios-clipboard-outline', size='24')
+        | Текущие проекты
+      MenuItem(name='2-1', to='/current_projects') CURRENT
+      MenuItem(
+        v-for="(It, idx) in linksCurrentProjects"
+        :key='idx'
+        :to='`${It.link}`'
+        :name='`2-${idx + 2}`'
+      ) {{ It.name }}
+    Submenu(name='3')
+      template(slot='title')
+        Icon(type='ios-archive-outline', size='24')
+        | Прошедшие проекты
+      MenuItem(name='3-1', to='/past_projects') Список
 
-      <Submenu name="2">
-        <template slot="title">
-          <!-- <Icon type="ios-filing" /> -->
-          <Icon type="ios-clipboard-outline" size="24" />Текущие проекты
-        </template>
-        <MenuItem name="2-1" to="/current_projects">CURRENT</MenuItem>
-        <MenuItem
-          v-for="(It, idx) in [
-            'Лаборатории',
-            'Эксперименты',
-            'Анкеты',
-            'Стимулы',
-            'Визиоряды',
-            'Респонденты',
-            'Группы',
-            'Данные',
-            'Отчеты',
-            'Зоны интереса',
-            'Графики',
-          ]"
-          :key="idx"
-          to="/#"
-          :name="`2-${idx + 2}`"
-        >{{ It }}</MenuItem>
-      </Submenu>
+  #layout_main
+    <nuxt />
 
-      <Submenu name="3">
-        <template slot="title">
-          <!-- <Icon type="ios-cog" /> -->
-          <Icon type="ios-archive-outline" size="24" />Прошедшие проекты
-        </template>
-        <MenuItem name="3-1" to="/past_projects">Список</MenuItem>
-      </Submenu>
-    </Menu>
+  footer#layout_footer.flex.y_center.x_sb
+    | © footer V({{ new Date(APP_VERSION).toLocaleString() }})
+    div
+      Button.mr-3(
+        :type="$i18n.locale === 'en' ? 'warning' : 'default'"
+        @click="changeLanguage('en')"
+      ) EN
+      Button(
+        :type="$i18n.locale === 'ru' ? 'warning' : 'default'"
+        @click="changeLanguage('ru')"
+      ) RU
 
-    <div id="layout_main">
-      <!-- Breadcrumb -->
-      <!-- 
-      <Breadcrumb :style="{margin: '10px 0'}">
-        <BreadcrumbItem>
-          <N-link to="/">
-            <Icon type="ios-home" size="24" />PROJECT's
-          </N-link>
-        </BreadcrumbItem>
-      </Breadcrumb> 
-      -->
-
-      <nuxt />
-    </div>
-
-    <footer id="layout_footer" class="flex y_center x_sb">
-      © footer V({{ new Date(APP_VERSION).toLocaleString() }})
-      <div>
-        <Button @click="changeLanguage('en')">EN</Button>
-        <Button @click="changeLanguage('ru')">RU</Button>
-      </div>
-    </footer>
-  </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 
 const linksNewProject = [
   {
@@ -147,11 +126,11 @@ const linksCurrentProjects = [
   { name: 'Стимулы', link: '/current_projects/stimul' },
   { name: 'Визиоряды', link: '/current_projects/sausage' },
   { name: 'Респонденты', link: '/current_projects/respondent' },
-  { name: 'Группы', link: '/current_projects/group' },
-  { name: 'Данные', link: '/current_projects/data' },
-  { name: 'Отчеты', link: '/current_projects/report' },
-  { name: 'Зоны интереса', link: '/current_projects/zoneinterest' },
-  { name: 'Графики', link: '/current_projects/charts' },
+  // { name: 'Группы', link: '/current_projects/group' },
+  // { name: 'Данные', link: '/current_projects/data' },
+  // { name: 'Отчеты', link: '/current_projects/report' },
+  // { name: 'Зоны интереса', link: '/current_projects/zoneinterest' },
+  // { name: 'Графики', link: '/current_projects/charts' },
 ]
 export default {
   // middleware: 'auth' login,
@@ -161,53 +140,30 @@ export default {
     return {
       APP_VERSION: process.env.APP_VERSION,
       polling: null,
-      timer: 1000 * 600,
+      timer: 1000 * 300,
 
       linksNewProject,
       linksCurrentProjects,
     }
   },
 
-  computed: mapState(['status']),
-  watch: {
-    // APP_VERSION(oldVal, newVal) {
-    //   // console.log(`Updating from ${oldVal} to ${newVal}`);
-    // },
-  },
-  created() {
-    console.log('user', this.$auth.hasScope('superuser'))
-
-    this.pollData()
-
-    if (!localStorage.APP_VERSION)
-      localStorage.APP_VERSION = process.env.APP_VERSION
-    if (
-      localStorage.APP_VERSION &&
-      localStorage.APP_VERSION !== process.env.APP_VERSION
-    ) {
-      // console.info('reRender')
-      // this.reRender()
-      localStorage.APP_VERSION = process.env.APP_VERSION
-    }
-  },
-  // updated() {},
+  // created() {
+  //   this.renderNotice()
+  // },
   beforeDestroy() {
     clearInterval(this.polling)
+    // this.logout()
   },
   methods: {
     changeLanguage(lang) {
       this.$i18n.locale = lang
     },
     logout() {
-      // this.$store.commit('user/LOGOUT')
-      // this.$router.push('/login')
-
       this.$auth.logout()
       this.$router.push('/login')
     },
     reRender() {
-      // this.$forceUpdate()
-      location.reload()
+      location.reload(true)
     },
 
     pollData() {
@@ -216,29 +172,21 @@ export default {
       }, this.timer)
     },
     renderNotice() {
-      this.$Notice.open({
+      this.$Notice.warning({
         title: 'Актуальность данных устарела',
         desc: '',
         render: (h) => {
-          return h(
-            'Button',
-            {
-              props: {
-                type: 'primary',
-              },
-              on: {
-                click: this.onClick,
-              },
-            },
-            'Обновить приложение'
+          return (
+            <div>
+              <p class="mb-3">Сохраните важные изменения</p>
+              <Button type="primary" onClick={this.reRender}>
+                и Обновите приложение
+              </Button>
+            </div>
           )
         },
-        // duration: 0
+        duration: 0,
       })
-    },
-    onClick() {
-      this.reRender()
-      this.logout()
     },
   },
 }

@@ -3,17 +3,12 @@ section
 
 
   //- pre {{ITEM}}
-
-  //- p {{ $t('_save') }} {{ $t('_new') }} {{ $t('text') }}
-  
-
   
   .flex.x_sb
     //- тригер isNewItem/item
     .text_x2.bold(
       v-if="isNewItem"
-    ) {{ $t('_new') }} {{ $t('text') }}
-    //- {{ $t('text') }}
+    ) {{ $t('new') }} {{ $t('text') }}
     .text_x2.flex(
       v-else
     ) 
@@ -21,7 +16,7 @@ section
         size="small"
         type="success"
         @click="ITEM = itemMaker()"
-      ) {{$t('_new')}} Text
+      ) {{$t('new')}} {{ $t('text') }}
       | mnemonic:
       b {{ITEM[0].mnemonic}}
 
@@ -31,7 +26,7 @@ section
       size="small"
       type="info"
       @click="resetITEM()"
-    ) {{ $t('clear_texts') }}
+    ) {{ $t('reset') }} {{ $t('text') }}
   
   //- форма
   .flex.mb-2.y_end
@@ -54,13 +49,20 @@ section
       :disabled="!(ITEM[0].mnemonic && ITEM.some(It => It.text))"
       :type="isNewItem ? 'success':'warning'"
       @click="isNewItem ? ADD() : PUT()"
-    ) {{isNewItem ? 'Добавить':'Изменить'}}
+    ) 
+      //- {{isNewItem ? 'Добавить':'Изменить'}}
+      | {{ $t( isNewItem ? 'add':'edit') }}
+      //- span(
+      //-   v-if="isNewItem"
+      //- ) {{ $t('add') }}
+      //- span(
+      //-   v-else
+      //- ) {{ $t('edit') }}
 
 
   //- фильтр/сортировка
   .my-1
-    //- {{ $t('list_of_phrases') }}
-    h3.center Список фраз
+    h3.center {{ $t('list_of_phrases') }}
     .flex
       Dropdown
         Button 
@@ -73,8 +75,11 @@ section
             v-for="It in ['text','language','mnemonic']"
             @click.native="UPDATE(It)"
           ) {{It}}
+      
+      //- enter-button
       Input.mx-1(
-        placeholder="фильтр"
+        placeholder="больше 2 букв, + можно по enter"
+        search
         v-model="keyword"
         @on-enter="CHANGE()"
       )
@@ -111,15 +116,14 @@ section
         type='primary'
         size="small"
         @click.stop="PUT(row)"
-      ) Сохранить
-      //- {{ $t('save') }}
+      ) {{ $t('save') }}
 
   .flex.y_center.x_sb.m-3
 
     Button(
       type='primary'
       @click="compile_texts()"
-    ) Сохранить {{ $t('_save') }}
+    ) {{ $t('save') }} {{ $t('list_of_phrases') }}
     
 
     Page(
