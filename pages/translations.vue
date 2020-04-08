@@ -1,101 +1,85 @@
 <template lang="pug">
 section
 
-
   //- pre {{ITEM}}
   
-  .flex.x_sb
-    //- тригер isNewItem/item
-    .text_x2.bold(
+  //- тригер isNewItem/item
+  .flex.x_sb.y_start
+    .flex.y_base(
       v-if="isNewItem"
-    ) {{ $t('new') }} {{ $t('text') }}
-    .text_x2.flex(
+    )
+      Alert(
+        type="success"
+        v-if="isNewItem"
+      ) {{ $t('add') }} {{ $t('new') }} {{ $t('text') }}
+    .flex.y_start(
       v-else
     ) 
+      //- new Text
       Button.mr-2(
-        size="small"
         type="success"
         @click="ITEM = itemMaker()"
-      ) {{$t('new')}} {{ $t('text') }}
-      | mnemonic:
-      b {{ITEM[0].mnemonic}}
-
-    //- 
+      ) « {{$t('new')}} {{ $t('text') }}
+      Alert(
+        type="warning"
+      )
+        | {{ $t('edit') }} mnemonic:
+        b {{ITEM[0].mnemonic}}
+    //- сбросить тексты
     Button.ml_auto(
       :disabled="!ITEM.some(It => It.text)"
       size="small"
       type="info"
       @click="resetITEM()"
     ) {{ $t('reset') }} {{ $t('text') }}
-  
+
+
   //- форма
-  .flex.mb-2.y_end
-    .m-1
-      b Мнемоника
-      Input(
+  .flex.y_end
+    div
+      .bold Мнемоника
+      Input.resize_g(
         placeholder='mnemonic'
         v-model='ITEM[0].mnemonic'
         @on-input-change="mnemonicChange($event)"
       )
-    .m-1(
+    .mx-1(
       v-for="It in ITEM"
     )
-      b {{mapLang(It.language)}}
-      Input(
+      .bold {{mapLang(It.language)}}
+      Input.resize_g(
         v-model='It.text'
       )
     //- 
-    Button.m-1(
+    Button.ml-2(
       :disabled="!(ITEM[0].mnemonic && ITEM.some(It => It.text))"
       :type="isNewItem ? 'success':'warning'"
       @click="isNewItem ? ADD() : PUT()"
     ) 
       //- {{isNewItem ? 'Добавить':'Изменить'}}
       | {{ $t( isNewItem ? 'add':'edit') }}
-      //- span(
-      //-   v-if="isNewItem"
-      //- ) {{ $t('add') }}
-      //- span(
-      //-   v-else
-      //- ) {{ $t('edit') }}
-
+  .small.mb-2 * {{ $t('required_for_edit_translations') }}
 
   //- фильтр/сортировка
-  .my-1
-    h3.center {{ $t('list_of_phrases') }}
-    .flex
-      Dropdown
-        Button 
-          | sort by: &nbsp;
-          icon(type='ios-arrow-down')
-        DropdownMenu(
-          slot='list'
-        )
-          DropdownItem(
-            v-for="It in ['text','language','mnemonic']"
-            @click.native="UPDATE(It)"
-          ) {{It}}
-      
-      //- enter-button
-      Input.mx-1(
-        placeholder="больше 2 букв, + можно по enter"
+  Alert.flex.x_center
+    .flex.y_center
+
+      //- пока живой поиск
+        @on-enter="UPDATE()"
+        @on-search="UPDATE()"
+      Input.ml-5(
+        style="width:300px"
+        size="large"
         search
+        enter-button
         v-model="keyword"
-        @on-enter="CHANGE()"
+        
       )
-      Button(
-        :disabled="keyword.length < 2"
-        type='primary'
-        @click="CHANGE()"
-      ) {{ $t('search') }}
       Button.ml-1(
-         :disabled="!keyword"
+        :disabled="!keyword"
         type="warning"
-        @click="UPDATE()"
+        @click="keyword=''"
       ) {{$t('reset')}} {{ $t('search') }}
-
-
-
 
 
 
@@ -123,9 +107,8 @@ section
     Button(
       type='primary'
       @click="compile_texts()"
-    ) {{ $t('save') }} {{ $t('list_of_phrases') }}
+    ) {{ $t('save') }} {{ $t('translations') }}
     
-
     Page(
       show-total
       :total='paging_totalCount',
@@ -133,9 +116,6 @@ section
       :current='pageParams.page', 
       @on-change='changePage'
     )
-
-
-
 </template>
 
 <script>
@@ -163,7 +143,7 @@ const columns = [
   },
 ]
 const pageParams = {
-  limit: 100,
+  limit: 5,
   page: 1,
 }
 export default {
@@ -187,6 +167,7 @@ export default {
       columns,
       pageParams,
       paging_totalCount: 0,
+      timeout: null,
     }
   },
   computed: {
@@ -200,6 +181,22 @@ export default {
       }, {})
     },
   },
+  /**/
+
+  watch: {
+    keyword(newVal, oldVal) {
+      // console.log(`Updating from ${oldVal} to ${newVal}`)
+      if (newVal || !newVal) {
+        // debounce
+        clearTimeout(this.timeout)
+        this.timeout = setTimeout(() => {
+          this.pageParams.page = 1
+          this.UPDATE()
+        }, 1000)
+      }
+    },
+  },
+
   created() {
     this.ITEM = this.itemMaker()
   },
@@ -215,6 +212,8 @@ export default {
         text: '',
       }))
     },
+
+    // mnemonic изменилась - обновить список ITEM
     mnemonicChange(e) {
       // console.log(e.target.value)
       const val = e.target.value
@@ -226,10 +225,11 @@ export default {
       }
     },
     changePage(page) {
-      console.log(page)
+      // console.log(page)
       this.pageParams.page = page
       this.UPDATE()
     },
+
     // rowClassName(row, index) {},
 
     async compile_texts() {
@@ -260,6 +260,7 @@ export default {
         this.UPDATE()
       } catch ({ response }) {
         // console.dir(response)
+        // TODO договориться о формате ошибок
         this.$Message.error(JSON.stringify(response.data))
       }
     },
@@ -289,23 +290,11 @@ export default {
       this.loading = true
 
       const { results, count } = await this.$API.ftext.list({
+        ...(this.keyword && { search: this.keyword }),
+        ordering: 'mnemonic',
         ...this.pageParams,
-        ordering: 'mnemonic',
       })
-      // this.keyword = ''
       this.paging_totalCount = count
-      this.Text = results
-      this.loading = false
-    },
-
-    async CHANGE() {
-      this.loading = true
-
-      const { results } = await this.$API.ftext.list({
-        search: this.keyword,
-        ordering: 'mnemonic',
-      })
-
       this.Text = results
       this.loading = false
     },
@@ -325,7 +314,12 @@ export default {
 
 <style lang="stylus">
 #custom_Table .ivu-table-body {
-  height: calc(100vh - 370px);
+  height: calc(100vh - 420px);
   overflow-y: scroll;
+}
+
+.resize_g {
+  resize: horizontal;
+  overflow: auto;
 }
 </style>
