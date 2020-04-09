@@ -10,18 +10,20 @@ section
         :key="idx"
         class="m-1"
         shape="circle"
-        :to='`${It.link}`'
+        :to='`/current_projects/${It.model}`'
       ) {{ It.name }}
+    
+    NuxtChild
 </template>
 
 <script>
 const linksCurrentProjects = [
-  { name: 'Лаборатории', link: '/current_projects/laboratory' },
-  { name: 'Эксперименты', link: '/current_projects/experiment' },
-  { name: 'Анкеты', link: '/current_projects/form' },
-  { name: 'Стимулы', link: '/current_projects/stimul' },
-  { name: 'Визиоряды', link: '/current_projects/sausage' },
-  { name: 'Респонденты', link: '/current_projects/respondent' },
+  { name: 'Лаборатории', model: 'laboratory' },
+  { name: 'Эксперименты', model: 'experiment' },
+  { name: 'Анкеты', model: 'form' },
+  { name: 'Стимулы', model: 'stimul' },
+  { name: 'Визиоряды', model: 'sausage' },
+  { name: 'Респонденты', model: 'respondent' },
   // { name: 'Группы', link: '/current_projects/group' },
   // { name: 'Данные', link: '/current_projects/data' },
   // { name: 'Отчеты', link: '/current_projects/report' },
