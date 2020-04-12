@@ -2,7 +2,7 @@
 section
 
 
-  //- pre {{ITEM}}
+  //- pre.pre {{ITEM}}
 
   p {{ $t('_save') }} {{ $t('_new') }} {{ $t('text') }}
   

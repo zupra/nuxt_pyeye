@@ -1,6 +1,6 @@
 <template lang="pug">
 section
-    pre {{group}}
+    pre.pre {{group}}
 </template>
 
 <script>

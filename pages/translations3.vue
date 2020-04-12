@@ -1,8 +1,8 @@
 <template lang="pug">
 section
 
-  //- pre {{Lang}}
-  //- pre {{newItem}}
+  //- pre.pre {{Lang}}
+  //- pre.pre {{newItem}}
 
   Collapse.mb-4
     Panel()
@@ -40,7 +40,7 @@ section
           ) + EN
 
 
-  //- pre {{Text}}
+  //- pre.pre {{Text}}
   //- NEED_COUPLE
 
   template(

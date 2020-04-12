@@ -4,25 +4,25 @@
 
     <h1>Список лабораторий с их загрузкой на определенное время вперед</h1>
 
-    <pre>ЛАБОРАТОРИИ:{{laboratoryList}}</pre>
+    <pre class="pre">ЛАБОРАТОРИИ:{{ laboratoryList }}</pre>
 
     <h2>Резервирование времени в лаборатории</h2>
 
     <Button
       type="primary"
       @click="toggleWeekends"
-      v-text="calendarWeekends ? 'без выходных':'c выходными'"
+      v-text="calendarWeekends ? 'без выходных' : 'c выходными'"
     ></Button>
 
     <Divider>Календарь загрузки лаборатории</Divider>
 
     <h3>Создать событие</h3>
     <div class="flex my-3">
-      <Input v-model="newEvent.title" style="width: 300px" placeholder="Название события"></Input>&emsp;
-      <DatePicker type="date" v-model="newEvent.start" placeholder="Начало" @keydown.native.prevent></DatePicker>&emsp;
+      <Input v-model="newEvent.title" style="width: 300px;" placeholder="Название события"></Input>&emsp;
+      <DatePicker v-model="newEvent.start" type="date" placeholder="Начало" @keydown.native.prevent></DatePicker>&emsp;
       <DatePicker
-        type="date"
         v-model="newEvent.end"
+        type="date"
         placeholder="Окончание"
         @keydown.native.prevent
       ></DatePicker>
@@ -39,19 +39,19 @@
 
     <client-only>
       <FullCalendar
-        class="demo-app-calendar"
         ref="fullCalendar"
+        class="demo-app-calendar"
         height="650"
-        defaultView="dayGridMonth"
+        default-view="dayGridMonth"
         :header="{
-      left: 'prev,next today',
-      center: 'title',
-    }"
+          left: 'prev,next today',
+          center: 'title',
+        }"
         :plugins="calendarPlugins"
-        @dateClick="handleDateClick"
         :events="calendarEvents"
         :locale="locale"
         :weekends="calendarWeekends"
+        @dateClick="handleDateClick"
       />
     </client-only>
 
@@ -71,24 +71,23 @@
 </template>
 
 <script>
-import Steps from '~/components/new_project/steps'
-
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import ruLocale from '@fullcalendar/core/locales/ru'
+import Steps from '~/components/new_project/steps'
 // import moment from 'moment'
 
 export default {
   components: {
     Steps,
-    FullCalendar
+    FullCalendar,
   },
   async asyncData({ app }) {
     const { results } = await app.$axios.$get('/core/api/laboratory/')
     return {
-      laboratoryList: results
+      laboratoryList: results,
     }
   },
 
@@ -99,7 +98,7 @@ export default {
         title: '',
         start: null,
         end: null,
-        allDay: null
+        allDay: null,
       },
       calendarWeekends: true,
       calendarPlugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -110,9 +109,9 @@ export default {
         {
           title: 'Занято на исследование',
           start: '2020-03-09',
-          end: '2020-03-14'
-        }
-      ]
+          end: '2020-03-14',
+        },
+      ],
     }
   },
   methods: {
@@ -120,7 +119,7 @@ export default {
       this.calendarWeekends = !this.calendarWeekends // update a property
     },
     gotoPast() {
-      let calendarApi = this.$refs.fullCalendar.getApi() // from the ref="..."
+      const calendarApi = this.$refs.fullCalendar.getApi() // from the ref="..."
       calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
     },
     handleDateClick(arg) {
@@ -147,13 +146,13 @@ export default {
             // add new event data
             title: 'New Event',
             start: arg.date,
-            allDay: arg.allDay
+            allDay: arg.allDay,
           })
           this.$Message.info('Создано событие')
         },
         onCancel: () => {
           this.$Message.info('Отмена')
-        }
+        },
       })
 
       /*
@@ -181,8 +180,8 @@ export default {
         }
       })
       */
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template lang="pug">
 section
   h1.center {{ $route.params.model }} API(list)
-  pre {{ $data }}
+  pre.pre {{ $data }}
 </template>
 
 <script>
@@ -20,7 +20,7 @@ export default {
 </script>
 
 <style scoped>
-pre {
+pre.pre {
   height: calc(100vh - 260px);
   text-align: initial;
 }

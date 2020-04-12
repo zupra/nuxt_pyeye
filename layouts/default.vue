@@ -32,8 +32,10 @@
         div(
           slot="content"
         )
-          pre {{$store.state.auth.user}}
+          pre.pre {{$store.state.auth.user}}
 
+
+      //- a(href="/admin/", title="title") Админка
 
       Button.mx-3(
         type='warning'
@@ -81,6 +83,7 @@
 
   footer#layout_footer.flex.y_center.x_sb
     | © footer V({{ new Date(APP_VERSION).toLocaleString() }})
+    
     div
       Button.mr-3(
         :type="$i18n.locale === 'en' ? 'warning' : 'default'"
@@ -235,7 +238,7 @@ export default {
   border-top: 1px solid #e3e5e8;
 }
 
-pre {
+pre.pre {
   height: 10em;
   overflow-y: auto;
   resize: vertical;

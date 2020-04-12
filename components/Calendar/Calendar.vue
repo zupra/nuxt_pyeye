@@ -3,8 +3,8 @@
 .flex.mt-5
   .mr-5
     p сегодня: {{new Date().toLocaleDateString()}} г.
-    pre clickedDay={{clickedDay}}
-    pre output={{output}}
+    pre.pre clickedDay={{clickedDay}}
+    pre.pre output={{output}}
 
   .Calendar
     .Cr-Head
@@ -30,7 +30,7 @@ const NOW = new Date()
 
 export default {
   name: 'Calendar',
-  //components: {},
+  // components: {},
   // props: {
   //   field_from: [String, Boolean],
   //   field_to: [String, Boolean],
@@ -52,13 +52,13 @@ export default {
         'Сен',
         'Окт',
         'Ноя',
-        'Дек'
+        'Дек',
       ],
       clickedDay: null,
       output: {
-        str: '', //1 Апр 2018
-        format: '' //2018-04-01
-      }
+        str: '', // 1 Апр 2018
+        format: '', // 2018-04-01
+      },
     }
   },
 
@@ -107,7 +107,7 @@ export default {
     },
     qtyDaysNextMonth() {
       return 42 - (this.daysInMonth + this._qtyDaysPrevMonth)
-    }
+    },
   },
   methods: {
     ltMonth() {
@@ -138,11 +138,11 @@ export default {
       this.output.format = `${this.currYear}-${fixMonth}-${fixDay}`
 
       this.$emit('setdate', this.output)
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="stylus">
-@import '~@/components/Calendar/_calendar.styl'
+@import '~@/components/Calendar/_calendar.styl';
 </style>

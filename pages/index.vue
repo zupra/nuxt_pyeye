@@ -7,7 +7,7 @@ section
     p.mb-4 Пользователь выбирает работу (3 пути)
   .flex.x_center.center
     N-link.CIRCLE.mx-4(v-for='It in links', :to='`${It.link}`') {{It.name}}
-  //- pre {{$data}}
+  //- pre.pre {{$data}}
 
   Divider
 
@@ -25,7 +25,7 @@ section
   )
     h3.mt-4 Эксперименты лаборатории 
       span.text_x2 {{experiment_id}}
-    //- pre {{experimentByLab}}
+    //- pre.pre {{experimentByLab}}
 
     .SCROLL(
       v-if="experimentByLab.length"
@@ -43,7 +43,7 @@ section
           | &emsp;
           | {{exp.name}}
           div(slot="content")
-            pre {{exp}}
+            pre.pre {{exp}}
     .bold(
       v-else
     ) нет экспериментов
@@ -63,39 +63,39 @@ section
           Button(
             @click="GET('stimul')"
           ) получить Стимулы
-          pre СТИМУЛЫ:{{stimul}}
+          pre.pre СТИМУЛЫ:{{stimul}}
         .GRID_item
           Button(
             @click="GET('sausage')"
           ) получить Визиоряды
-          pre ВИЗИОРЯДЫ:{{sausage}}
+          pre.pre ВИЗИОРЯДЫ:{{sausage}}
         .GRID_item
           Button(
             @click="GET('respondent')"
           ) получить Респондентов
-          pre РЕСПОНДЕНТЫ:{{respondent}}
+          pre.pre РЕСПОНДЕНТЫ:{{respondent}}
         .GRID_item
           Button(
             @click="GET('group')"
           ) получить Группы
-          pre ГРУППЫ:{{group}}
+          pre.pre ГРУППЫ:{{group}}
         .GRID_item
           Button(
             @click="GET('data')"
           ) получить Данные
-          pre ДАННЫЕ:{{data}}
+          pre.pre ДАННЫЕ:{{data}}
         .GRID_item
           Button(
             @click="GET('report')"
           ) получить Отчеты
-          pre ОТЧЕТЫ:{{report}}
+          pre.pre ОТЧЕТЫ:{{report}}
 
         .GRID_item
           Button(
             @click="getForm"
           ) получить Анкеты
-          pre forms:{{forms}}
-          pre form_resp:{{form_resp}}
+          pre.pre forms:{{forms}}
+          pre.pre form_resp:{{form_resp}}
 </template>
 <script>
 export default {

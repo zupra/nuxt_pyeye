@@ -1,11 +1,22 @@
 <template lang="pug">
-//- pre {{row}}
+//- pre.pre {{row}}
 .GRID
   .GRID_item(
     v-for="(V,K) in row"
   )
+    //- template(
+    //-   v-if="typeof K !== 'object'"
+    //- )
     b {{K}}
-    span : {{V}}
+    i(
+      v-if="K === 'video_file'"
+    ) : LINK video_file
+    span(
+      v-else
+    ) : {{V}}
+    //- pre.pre(
+    //-   v-if="K == 'product_type'"
+    //- ) {{row.K}}
   
 </template>
 

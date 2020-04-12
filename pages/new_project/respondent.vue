@@ -3,8 +3,8 @@
     <Steps />
     <h1>Респонденты</h1>
 
-    <pre>РЕСПОНДЕНТЫ:{{Respondent}}</pre>
-    {{TD}}
+    <pre class="pre">РЕСПОНДЕНТЫ:{{ Respondent }}</pre>
+    {{ TD }}
     <!-- 
     <template v-for="(It,idx) in Respondent.results">
       <dl v-for="(Val,Key) in It">
@@ -28,25 +28,25 @@
             <div>
               <p>Эксперимент</p>
               <Select placeholder="Эксперимент">
-                <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
+                <Option v-for="(It, idx) in [1, 2, 3]" :key="idx" :value="It">{{ It }}</Option>
               </Select>
             </div>
             <div class="ml-5">
               <p>Визиоряд</p>
               <Select placeholder="Визиоряд">
-                <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
+                <Option v-for="(It, idx) in [1, 2, 3]" :key="idx" :value="It">{{ It }}</Option>
               </Select>
             </div>
             <div class="ml-5">
               <p>Ведущий глаз</p>
               <Select placeholder="Ведущий глаз">
-                <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
+                <Option v-for="(It, idx) in [1, 2, 3]" :key="idx" :value="It">{{ It }}</Option>
               </Select>
             </div>
             <div class="ml-5">
               <p>Ведущая рука</p>
               <Select placeholder="Ведущая рука">
-                <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
+                <Option v-for="(It, idx) in [1, 2, 3]" :key="idx" :value="It">{{ It }}</Option>
               </Select>
             </div>
           </div>
@@ -55,24 +55,28 @@
             <div>
               <p>Пол</p>
               <Select placeholder="Пол">
-                <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
+                <Option v-for="(It, idx) in [1, 2, 3]" :key="idx" :value="It">{{ It }}</Option>
               </Select>
             </div>
 
             <label class="flex_col ml-4">
               возраст
-              <Input style="width:5em"></Input>
+              <Input style="width: 5em;"></Input>
             </label>
 
             <label v-for="item in respondent" class="flex_col ml-4">
-              {{item.label}}
+              {{ item.label }}
               <Input v-model="item.value"></Input>
             </label>
           </div>
 
           <label class="flex_col mb-5">
             Комментарий
-            <Input type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Комментарий..."></Input>
+            <Input
+              type="textarea"
+              :autosize="{ minRows: 2, maxRows: 5 }"
+              placeholder="Комментарий..."
+            ></Input>
           </label>
 
           <Button type="primary">Создать</Button>
@@ -84,21 +88,21 @@
       <div>
         <p>Пол</p>
         <Select placeholder="Пол">
-          <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
+          <Option v-for="(It, idx) in [1, 2, 3]" :key="idx" :value="It">{{ It }}</Option>
         </Select>
       </div>
 
       <div class="ml-4">
         <p>Ведущий глаз</p>
         <Select placeholder="Ведущий глаз">
-          <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
+          <Option v-for="(It, idx) in [1, 2, 3]" :key="idx" :value="It">{{ It }}</Option>
         </Select>
       </div>
 
       <div class="ml-4">
         <p>Ведущая рука</p>
         <Select placeholder="Ведущая рука">
-          <Option v-for="(It,idx) in [1,2,3]" :key="idx" :value="It">{{It}}</Option>
+          <Option v-for="(It, idx) in [1, 2, 3]" :key="idx" :value="It">{{ It }}</Option>
         </Select>
       </div>
 
@@ -106,8 +110,8 @@
         <p>Возраст</p>
         <span>
           от
-          <Input style="width:5em"></Input>До
-          <Input style="width:5em"></Input>
+          <Input style="width: 5em;"></Input>До
+          <Input style="width: 5em;"></Input>
         </span>
       </div>
     </div>
@@ -138,7 +142,7 @@
         </div>
       </Card>
     </div>
-    <pre>{{$data}}</pre>
+    <pre.pre>{{$data}}</pre.pre>
     -->
   </div>
 </template>
@@ -147,16 +151,16 @@
 import Steps from '~/components/new_project/steps'
 export default {
   components: {
-    Steps
+    Steps,
   },
   async asyncData({ app }) {
     const [Respondent] = await Promise.all([
       // app.$axios.$get('https://randomuser.me/api/?results=60'),
-      app.$axios.$get('/core/api/respondent/?page=2')
+      app.$axios.$get('/core/api/respondent/?page=2'),
     ])
     return {
       // Users: Randomuser.results,
-      Respondent
+      Respondent,
     }
   },
   data() {
@@ -165,24 +169,24 @@ export default {
       respondent: [
         {
           value: '',
-          label: 'Имя'
+          label: 'Имя',
         },
         {
           value: '',
-          label: 'Фамилия'
+          label: 'Фамилия',
         },
         {
           value: '',
-          label: 'Отчество'
-        }
-      ]
+          label: 'Отчество',
+        },
+      ],
     }
   },
   computed: {
     TD() {
       return Object.keys(this.Respondent.results[0])
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -207,5 +211,4 @@ export default {
     dt
       color #999
       text-align right
-
 </style>

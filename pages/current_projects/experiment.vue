@@ -1,11 +1,19 @@
 <template lang="pug">
 section
 
-  h1.mb-3 Эксперименты
-  Table#custom_tableExperiment(
+  .flex
+    div
+      LaboratoryId(
+        @laboratory="pageParams.laboratory = $event;UPDATE()"
+      )
+      h1.mb-3 Эксперименты
+    pre.ml-5 {{pageParams}}
+  Table#__custom_tableExperiment(
     border
+    :loading="loading"
     :columns="columns"
     :data="experiment"
+    @on-sort-change="changeSort($event)"
   )
     template(slot-scope='{ row, index }', slot='create_time')
       span {{ new Date(row.create_time).toLocaleString() }}
@@ -20,11 +28,23 @@ section
         size="small"
       ) Button
 
+  Page.mt-4(
+    show-total
+    :total='pageParams.total',
+    :page-size='pageParams.limit'
+    :current='pageParams.page', 
+    @on-change='changePage'
+  )
     
 </template>
 
 <script>
+// https://vueschool.io/articles/vuejs-tutorials/lazy-loading-and-code-splitting-in-vue-js/
 import expandRow from '~/components/Table/table-expand.vue'
+// const expandRow = () =>('./my-async-component')
+// const expandRow = () => import('~/components/Table/table-expand.vue')
+
+import LaboratoryId from '~/components/LaboratoryId.vue'
 
 const columns = [
   {
@@ -39,12 +59,20 @@ const columns = [
     },
   },
   {
+    title: 'Id',
+    key: 'id',
+    sortable: 'custom',
+  },
+  {
     title: 'Name',
     key: 'name',
+    sortable: 'custom',
   },
   {
     title: 'Created',
+    key: 'create_time',
     slot: 'create_time',
+    sortable: 'custom',
   },
   {
     title: 'Status',
@@ -65,31 +93,74 @@ const columns = [
     align: 'center',
   },
 ]
-
+const pageParams = {
+  limit: 5,
+  page: 1,
+  // total: 0,
+  //
+  laboratory: 1,
+  ordering: 'id',
+}
 export default {
-  components: { expandRow },
+  components: {
+    expandRow,
+    LaboratoryId,
+  },
 
   async asyncData({ app }) {
     const [Experiment] = await Promise.all([
-      app.$axios.$get('/core/api/experiment/'),
+      app.$API.experiment.list({ ...pageParams }),
     ])
     return {
       experiment: Experiment.results,
+      pageParams: { ...pageParams, total: Experiment.count },
     }
   },
   data() {
     return {
+      loading: false,
       columns,
+      // pageParams,
     }
   },
   computed: {},
-  methods: {},
+  methods: {
+    changeSort(obj) {
+      // normal asc desc
+      const by =
+        obj.order === 'asc'
+          ? `-${obj.key}`
+          : obj.order === 'desc'
+          ? `${obj.key}`
+          : 'id'
+      this.pageParams = { ...this.pageParams, ...(by && { ordering: by }) }
+      this.UPDATE()
+    },
+    changePage(page) {
+      // console.log(page)
+      this.pageParams.page = page
+      this.UPDATE()
+    },
+    async UPDATE() {
+      this.loading = true
+
+      const { results, count } = await this.$API.experiment.list({
+        // ...(this.keyword && { search: this.keyword }),
+        // ordering: 'mnemonic',
+        // laboratory: 1,
+        ...this.pageParams,
+      })
+      this.pageParams.total = count
+      this.experiment = results
+      this.loading = false
+    },
+  },
 }
 </script>
 
 <style lang="stylus">
-#custom_tableExperiment .ivu-table-body {
-  height: calc(100vh - 280px);
+#__custom_tableExperiment .ivu-table-body {
+  height: calc(100vh - 400px);
   overflow-y: scroll;
 }
 </style>

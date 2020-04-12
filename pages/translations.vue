@@ -1,7 +1,7 @@
 <template lang="pug">
 section
 
-  //- pre {{ITEM}}
+  //- pre.pre {{ITEM}}
   
   //- тригер isNewItem/item
   .flex.x_sb.y_start
