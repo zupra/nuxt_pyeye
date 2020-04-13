@@ -5,7 +5,7 @@ section
   .flex
     div
       LaboratoryId(
-        @laboratory="pageParams.experiment__laboratory = $event;UPDATE()"
+        @laboratory="changeParams($event)"
       )
       h1.mb-3 Стимулы
     pre.ml-5 {{pageParams}}
@@ -104,9 +104,9 @@ const pageParams = {
   limit: 10,
   page: 1,
   // total: 0,
-  // laboratory: 1,
+  laboratory: 1,
 
-  // experiment__laboratory: 1,
+  experiment__laboratory: 1,
   // experiment: 1,
   ordering: 'id',
 }
@@ -116,15 +116,16 @@ export default {
     LaboratoryId,
   },
 
-  async asyncData({ app }) {
-    const [stimul] = await Promise.all([
-      app.$API.stimul.list({ ...pageParams }),
-    ])
+  async asyncData({ app, route }) {
+    const Params = localStorage.getItem(`${route.path}`)
+      ? JSON.parse(localStorage.getItem(`${route.path}`))
+      : pageParams
+    const [stimul] = await Promise.all([app.$API.stimul.list({ ...Params })])
     // const { product_type, ...rest } = stimul.results
     // stimul.results.map(({ product_type, ...rest }) => ({ ...rest })),
     return {
       stimul: stimul.results,
-      pageParams: { ...pageParams, total: stimul.count },
+      pageParams: { ...Params, total: stimul.count },
     }
   },
   data() {
@@ -136,6 +137,14 @@ export default {
   },
   computed: {},
   methods: {
+    changeParams(event) {
+      this.pageParams = {
+        ...this.pageParams,
+        page: 1,
+        experiment__laboratory: event,
+      }
+      this.UPDATE()
+    },
     changeSort(obj) {
       // normal asc desc
       const by =

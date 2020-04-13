@@ -121,11 +121,15 @@ const pageParams = {
 export default {
   components: { expandRow },
 
-  async asyncData({ app }) {
-    const [forms] = await Promise.all([app.$API.form.list({ ...pageParams })])
+  async asyncData({ app, route }) {
+    const Params = localStorage.getItem(`${route.path}`)
+      ? JSON.parse(localStorage.getItem(`${route.path}`))
+      : pageParams
+
+    const [forms] = await Promise.all([app.$API.form.list({ ...Params })])
     return {
       forms: forms.results,
-      pageParams: { ...pageParams, total: forms.count },
+      pageParams: { ...Params, total: forms.count },
     }
   },
   data() {

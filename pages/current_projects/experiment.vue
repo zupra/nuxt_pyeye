@@ -6,7 +6,7 @@ section
   .flex
     div
       LaboratoryId(
-        @laboratory="pageParams.laboratory = $event;UPDATE()"
+        @laboratory="changeParams($event)"
       )
       h1.mb-3 Эксперименты
     pre.ml-5 {{pageParams}}
@@ -106,19 +106,33 @@ const pageParams = {
   laboratory: 1,
   ordering: 'id',
 }
+
+// APIparams('experiment', 'core')
+class APIparams {
+  constructor(params) {
+    this.params = params
+  }
+}
+// new APIparams()
+
 export default {
   components: {
     expandRow,
     LaboratoryId,
   },
 
-  async asyncData({ app }) {
+  async asyncData({ app, route }) {
+    console.log(route.path)
+    // console.info('test Params', JSON.parse(localStorage.getItem(`${route.path}`)))
+    const Params = localStorage.getItem(`${route.path}`)
+      ? JSON.parse(localStorage.getItem(`${route.path}`))
+      : pageParams
     const [Experiment] = await Promise.all([
-      app.$API.experiment.list({ ...pageParams }),
+      app.$API.experiment.list({ ...Params }),
     ])
     return {
       experiment: Experiment.results,
-      pageParams: { ...pageParams, total: Experiment.count },
+      pageParams: { ...Params, total: Experiment.count },
     }
   },
   data() {
@@ -130,6 +144,10 @@ export default {
   },
   computed: {},
   methods: {
+    changeParams(event) {
+      this.pageParams = { ...this.pageParams, page: 1, laboratory: event }
+      this.UPDATE()
+    },
     changeSort(obj) {
       // normal asc desc
       const by =
@@ -165,7 +183,7 @@ export default {
 
 <style lang="stylus">
 #__custom_tableExperiment .ivu-table-body {
-  height: calc(100vh - 400px);
+  height: calc(100vh - 440px);
   overflow-y: scroll;
 }
 </style>

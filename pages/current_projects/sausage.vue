@@ -1,7 +1,8 @@
 <template lang="pug">
 section
+
   LaboratoryId(
-    @laboratory="pageParams.experiment__laboratory = $event;UPDATE()"
+    @laboratory="changeParams($event)"
   )
 
   h1.mb-3 Визиоряды
@@ -108,13 +109,14 @@ const pageParams = {
 export default {
   components: { expandRow, LaboratoryId },
 
-  async asyncData({ app }) {
-    const [sausage] = await Promise.all([
-      app.$API.sausage.list({ ...pageParams }),
-    ])
+  async asyncData({ app, route }) {
+    const Params = localStorage.getItem(`${route.path}`)
+      ? JSON.parse(localStorage.getItem(`${route.path}`))
+      : pageParams
+    const [sausage] = await Promise.all([app.$API.sausage.list({ ...Params })])
     return {
       sausage: sausage.results,
-      pageParams: { ...pageParams, total: sausage.count },
+      pageParams: { ...Params, total: sausage.count },
     }
   },
   data() {
@@ -125,6 +127,14 @@ export default {
   },
   computed: {},
   methods: {
+    changeParams(event) {
+      this.pageParams = {
+        ...this.pageParams,
+        page: 1,
+        experiment__laboratory: event,
+      }
+      this.UPDATE()
+    },
     changeSort(obj) {
       // normal asc desc
       const by =

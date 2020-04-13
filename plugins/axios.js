@@ -6,10 +6,23 @@ export default function ({ $axios, redirect, app, store }) {
 
     // console.dir(config)
     // config.url
-    console.dir(app.router)
-    if (config.params) {
-      console.log(config.url, config.params)
-      localStorage.setItem(`${config.url}`, JSON.stringify(config.params))
+    // console.dir(app.router)
+
+    // console.log('currentRoute', app.router.currentRoute.path)
+    // console.log('config', config.url, config.params)
+    if (
+      app.router.currentRoute &&
+      config.params &&
+      Object.keys(config.params).length
+    ) {
+      // console.log('XXX', app.router.currentRoute.path)
+      const { total, ...params } = config.params
+      localStorage.setItem(
+        // replace(/\//g, '_')
+        // `${config.url}`.slice(0, -1),
+        `${app.router.currentRoute.path}`,
+        JSON.stringify(params)
+      )
 
       /*
       if (localStorage.getItem(`${config.url}`)) {

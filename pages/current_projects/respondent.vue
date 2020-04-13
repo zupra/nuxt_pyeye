@@ -1,9 +1,13 @@
 <template lang="pug">
 section
 
+  LaboratoryId(
+    @laboratory="changeParams($event)"
+  )
+
   h1.mb-3 Респонденты
   //- pre.pre {{respondent}}
-  pre {experiment__laboratory: 1,experiment: 1}
+  //- pre {experiment__laboratory: 1,experiment: 1}
   Table#custom_tableExperiment(
     border
     size="small"
@@ -35,6 +39,8 @@ section
 import expandRow from '~/components/Table/table-expand.vue'
 // const expandRow = () =>('./my-async-component')
 // const expandRow = () => import('~/components/Table/table-expand.vue')
+
+import LaboratoryId from '~/components/LaboratoryId.vue'
 
 const columns = [
   {
@@ -108,19 +114,23 @@ const pageParams = {
   // total: 0,
   // laboratory: 1,
   experiment__laboratory: 1,
-  experiment: 1,
+  // experiment: 1,
   ordering: 'id',
 }
 export default {
-  components: { expandRow },
+  components: { expandRow, LaboratoryId },
 
-  async asyncData({ app }) {
+  async asyncData({ app, route }) {
+    const Params = localStorage.getItem(`${route.path}`)
+      ? JSON.parse(localStorage.getItem(`${route.path}`))
+      : pageParams
+
     const [respondent] = await Promise.all([
-      app.$API.respondent.list({ ...pageParams }),
+      app.$API.respondent.list({ ...Params }),
     ])
     return {
       respondent: respondent.results,
-      pageParams: { ...pageParams, total: respondent.count },
+      pageParams: { ...Params, total: respondent.count },
     }
   },
   data() {
@@ -131,6 +141,14 @@ export default {
   },
   computed: {},
   methods: {
+    changeParams(event) {
+      this.pageParams = {
+        ...this.pageParams,
+        page: 1,
+        experiment__laboratory: event,
+      }
+      this.UPDATE()
+    },
     changeSort(obj) {
       // normal asc desc
       const by =
@@ -163,7 +181,7 @@ export default {
 
 <style lang="stylus">
 #custom_tableExperiment .ivu-table-body {
-  height: calc(100vh - 320px);
+  height: calc(100vh - 380px);
   overflow-y: scroll;
 }
 </style>

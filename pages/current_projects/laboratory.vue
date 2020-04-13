@@ -1,6 +1,6 @@
 <template lang="pug">
 section
-  pre.pre {{laboratory}}
+  //- pre.pre {{laboratory}}
 
   Table(
     border
@@ -11,19 +11,12 @@ section
       //- span(v-text="mapLang(row.language)")
       | {{row.language}}
     template(slot-scope='{ row, index }', slot='action')
-      Button(
-        type='primary'
-        size="small"
-      ) {{ $t('save') }}
+      b some action
+      //- Button(
+      //-   type='primary'
+      //-   size="small"
+      //- ) {{ $t('save') }}
 
-
-  //- :total='paging_totalCount',
-  //- :page-size='pageParams.limit'
-  //- :current='pageParams.page', 
-  //- @on-change='changePage'
-  //- Page(
-  //-   show-total
-  //- )
 
 </template>
 

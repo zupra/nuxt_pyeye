@@ -37,6 +37,12 @@
 
       //- a(href="/admin/", title="title") Админка
 
+
+      Button.mx-3(
+        type='warning'
+        size="small"
+        @click='localStorage_clear()'
+      ) сбросить фильтры
       Button.mx-3(
         type='warning'
         size="small"
@@ -150,9 +156,10 @@ export default {
     }
   },
 
-  // created() {
-  //   this.renderNotice()
-  // },
+  created() {
+    this.renderNotice()
+    // this.pollData()
+  },
   beforeDestroy() {
     clearInterval(this.polling)
     // this.logout()
@@ -167,6 +174,10 @@ export default {
     },
     reRender() {
       location.reload(true)
+    },
+
+    localStorage_clear() {
+      localStorage.clear()
     },
 
     pollData() {
