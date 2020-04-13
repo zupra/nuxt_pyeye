@@ -5,7 +5,7 @@ section
   h1.mb-3 Анкеты
   //- pre.pre {{forms}}
   //-
-  Table#custom_tableExperiment(
+  Table#custom_tableForm(
     border
     :loading="loading"
     :columns="columns"
@@ -58,28 +58,45 @@ const columns = [
     title: 'Id',
     key: 'id',
     sortable: 'custom',
+    width: 70,
+    align: 'center',
   },
   {
     title: 'Name',
     key: 'name',
     sortable: 'custom',
   },
-
-  // {
-  //   title: 'Эксперимент',
-  //   key: 'experiment_name',
-  // },
-  // {
-  //   title: 'Длина, мс',
-  //   key: 'length',
-  //   sortable: 'custom',
-  // },
-
-  // {
-  //   title: 'Создан',
-  //   key: 'create_time',
-  //   slot: 'create_time',
-  // },
+  {
+    title: 'Type',
+    key: 'type',
+    width: 90,
+    align: 'center',
+  },
+  {
+    title: 'Status',
+    key: 'status',
+    width: 90,
+    align: 'center',
+  },
+  {
+    title: 'Описание',
+    key: 'description',
+  },
+  {
+    title: 'кол-во вопросов',
+    key: 'count_questions',
+    // width: 110,
+  },
+  {
+    title: 'кол-во ответов',
+    key: 'count_answers',
+    // width: 110,
+  },
+  {
+    title: 'Создан',
+    key: 'create_time',
+    slot: 'create_time',
+  },
   // {
   //   title: 'Обновлен',
   //   key: 'update_time',
@@ -93,7 +110,7 @@ const columns = [
   // },
 ]
 const pageParams = {
-  limit: 5,
+  limit: 10,
   page: 1,
   // total: 0,
   // laboratory: 1,
@@ -150,7 +167,7 @@ export default {
 </script>
 
 <style lang="stylus">
-#custom_tableExperiment .ivu-table-body {
+#custom_tableForm .ivu-table-body {
   height: calc(100vh - 320px);
   overflow-y: scroll;
 }

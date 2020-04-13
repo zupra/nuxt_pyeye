@@ -6,7 +6,7 @@ section
 
   h1.mb-3 Визиоряды
   //- pre.pre {{sausage}}
-  Table#custom_tableExperiment(
+  Table#custom_tableSausage(
     border
     :loading="loading"
     :columns="columns"
@@ -60,6 +60,8 @@ const columns = [
     title: 'Id',
     key: 'id',
     sortable: 'custom',
+    width: 70,
+    align: 'center',
   },
   {
     title: 'Name',
@@ -94,7 +96,7 @@ const columns = [
   },
 ]
 const pageParams = {
-  limit: 5,
+  limit: 10,
   page: 1,
   // total: 0,
   // laboratory: 1,
@@ -154,8 +156,8 @@ export default {
 </script>
 
 <style lang="stylus">
-#custom_tableExperiment .ivu-table-body {
-  height: calc(100vh - 320px);
+#custom_tableSausage .ivu-table-body {
+  height: calc(100vh - 380px);
   overflow-y: scroll;
 }
 </style>

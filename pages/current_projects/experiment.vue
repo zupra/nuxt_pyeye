@@ -1,6 +1,8 @@
 <template lang="pug">
 section
 
+  pre {{$route.path}}
+
   .flex
     div
       LaboratoryId(
@@ -8,6 +10,7 @@ section
       )
       h1.mb-3 Эксперименты
     pre.ml-5 {{pageParams}}
+
   Table#__custom_tableExperiment(
     border
     :loading="loading"
@@ -62,6 +65,8 @@ const columns = [
     title: 'Id',
     key: 'id',
     sortable: 'custom',
+    width: 70,
+    align: 'center',
   },
   {
     title: 'Name',
@@ -94,7 +99,7 @@ const columns = [
   },
 ]
 const pageParams = {
-  limit: 5,
+  limit: 10,
   page: 1,
   // total: 0,
   //

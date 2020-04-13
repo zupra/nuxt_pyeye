@@ -47,7 +47,7 @@ const columns = [
 ]
 
 const pageParams = {
-  limit: 5,
+  limit: 10,
   page: 1,
 }
 export default {

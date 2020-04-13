@@ -53,6 +53,7 @@ const columns = [
     key: 'id',
     sortable: 'custom',
     width: 70,
+    align: 'center',
   },
   {
     title: 'first_name',
@@ -102,7 +103,7 @@ const columns = [
   },
 ]
 const pageParams = {
-  limit: 5,
+  limit: 10,
   page: 1,
   // total: 0,
   // laboratory: 1,

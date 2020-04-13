@@ -125,10 +125,10 @@ const linksNewProject = [
 const linksCurrentProjects = [
   { name: 'Лаборатории', link: '/current_projects/laboratory' },
   { name: 'Эксперименты', link: '/current_projects/experiment' },
-  { name: 'Анкеты', link: '/current_projects/form' },
   { name: 'Стимулы', link: '/current_projects/stimul' },
   { name: 'Визиоряды', link: '/current_projects/sausage' },
   { name: 'Респонденты', link: '/current_projects/respondent' },
+  { name: 'Анкеты', link: '/current_projects/form' },
   // { name: 'Группы', link: '/current_projects/group' },
   // { name: 'Данные', link: '/current_projects/data' },
   // { name: 'Отчеты', link: '/current_projects/report' },

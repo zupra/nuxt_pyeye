@@ -57,6 +57,8 @@ export default {
     '~/plugins/i18n',
     '~/plugins/vuex-persist',
     '~/plugins/repository',
+    // '~/plugins/vue2-storage',
+
     // {src: '~/plugins/full-calendar.js', ssr: false}
   ],
   /*

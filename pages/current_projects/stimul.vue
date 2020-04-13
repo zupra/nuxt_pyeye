@@ -2,13 +2,16 @@
 section
 
 
-  LaboratoryId(
-    @laboratory="pageParams.experiment__laboratory = $event;UPDATE()"
-  )
+  .flex
+    div
+      LaboratoryId(
+        @laboratory="pageParams.experiment__laboratory = $event;UPDATE()"
+      )
+      h1.mb-3 Стимулы
+    pre.ml-5 {{pageParams}}
 
-  h1.mb-3 Стимулы
   //- pre.pre {{stimul}}
-  Table#custom_tableExperiment(
+  Table#custom_tableStimul(
     border
     :loading="loading"
     :columns="columns"
@@ -98,7 +101,7 @@ const columns = [
   },
 ]
 const pageParams = {
-  limit: 5,
+  limit: 10,
   page: 1,
   // total: 0,
   // laboratory: 1,
@@ -167,8 +170,8 @@ export default {
 </script>
 
 <style lang="stylus">
-#custom_tableExperiment .ivu-table-body {
-  height: calc(100vh - 320px);
+#custom_tableStimul .ivu-table-body {
+  height: calc(100vh - 400px);
   overflow-y: scroll;
 }
 </style>

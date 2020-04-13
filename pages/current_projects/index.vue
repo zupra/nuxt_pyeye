@@ -20,10 +20,10 @@ section
 const linksCurrentProjects = [
   { name: 'Лаборатории', model: 'laboratory' },
   { name: 'Эксперименты', model: 'experiment' },
-  { name: 'Анкеты', model: 'form' },
   { name: 'Стимулы', model: 'stimul' },
   { name: 'Визиоряды', model: 'sausage' },
   { name: 'Респонденты', model: 'respondent' },
+  { name: 'Анкеты', model: 'form' },
   // { name: 'Группы', link: '/current_projects/group' },
   // { name: 'Данные', link: '/current_projects/data' },
   // { name: 'Отчеты', link: '/current_projects/report' },
