@@ -1,14 +1,13 @@
 <template lang="pug">
 section
 
-
   .flex
     div
       LaboratoryId(
         @laboratory="changeParams($event)"
       )
       h1.mb-3 Стимулы
-    pre.ml-5 {{pageParams}}
+    pre.ml-5 pageParams:{{pageParams}}
 
   //- pre.pre {{stimul}}
   Table#custom_tableStimul(
@@ -45,7 +44,6 @@ section
 
 <script>
 import expandRow from '~/components/Table/table-expand.vue'
-// const expandRow = () =>('./my-async-component')
 // const expandRow = () => import('~/components/Table/table-expand.vue')
 
 import LaboratoryId from '~/components/LaboratoryId.vue'
@@ -103,9 +101,8 @@ const columns = [
 const pageParams = {
   limit: 10,
   page: 1,
-  // total: 0,
-  laboratory: 1,
 
+  // laboratory: 1,
   experiment__laboratory: 1,
   // experiment: 1,
   ordering: 'id',
@@ -117,15 +114,18 @@ export default {
   },
 
   async asyncData({ app, route }) {
-    const Params = localStorage.getItem(`${route.path}`)
-      ? JSON.parse(localStorage.getItem(`${route.path}`))
-      : pageParams
-    const [stimul] = await Promise.all([app.$API.stimul.list({ ...Params })])
+    const [stimul] = await Promise.all([
+      app.$API.stimul.list({ ...pageParams }, { get: 'stimul' }),
+    ])
     // const { product_type, ...rest } = stimul.results
     // stimul.results.map(({ product_type, ...rest }) => ({ ...rest })),
     return {
       stimul: stimul.results,
-      pageParams: { ...Params, total: stimul.count },
+      pageParams: {
+        ...pageParams,
+        ...(localStorage.stimul && JSON.parse(localStorage.stimul)),
+        total: stimul.count,
+      },
     }
   },
   data() {
@@ -164,12 +164,12 @@ export default {
     async UPDATE() {
       this.loading = true
 
-      const { results, count } = await this.$API.stimul.list({
-        // ...(this.keyword && { search: this.keyword }),
-        // ordering: 'mnemonic',
-        // laboratory: 1,
-        ...this.pageParams,
-      })
+      const { results, count } = await this.$API.stimul.list(
+        {
+          ...this.pageParams,
+        },
+        { set: 'stimul' }
+      )
       this.pageParams.total = count
       this.stimul = results
       this.loading = false

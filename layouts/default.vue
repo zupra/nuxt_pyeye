@@ -135,9 +135,9 @@ const linksCurrentProjects = [
   { name: 'Визиоряды', link: '/current_projects/sausage' },
   { name: 'Респонденты', link: '/current_projects/respondent' },
   { name: 'Анкеты', link: '/current_projects/form' },
-  // { name: 'Группы', link: '/current_projects/group' },
+  { name: 'Группы', link: '/current_projects/group' },
   // { name: 'Данные', link: '/current_projects/data' },
-  // { name: 'Отчеты', link: '/current_projects/report' },
+  { name: 'Отчеты', link: '/current_projects/report' },
   // { name: 'Зоны интереса', link: '/current_projects/zoneinterest' },
   // { name: 'Графики', link: '/current_projects/charts' },
 ]
@@ -157,7 +157,7 @@ export default {
   },
 
   created() {
-    this.renderNotice()
+    // this.renderNotice()
     // this.pollData()
   },
   beforeDestroy() {

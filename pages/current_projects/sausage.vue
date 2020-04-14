@@ -1,12 +1,14 @@
 <template lang="pug">
 section
 
-  LaboratoryId(
-    @laboratory="changeParams($event)"
-  )
+  .flex
+    div
+      LaboratoryId(
+        @laboratory="changeParams($event)"
+      )
+      h1.mb-3 Визиоряды
+    pre.ml-5 pageParams:{{pageParams}}
 
-  h1.mb-3 Визиоряды
-  //- pre.pre {{sausage}}
   Table#custom_tableSausage(
     border
     :loading="loading"
@@ -41,7 +43,6 @@ section
 
 <script>
 import expandRow from '~/components/Table/table-expand.vue'
-// const expandRow = () =>('./my-async-component')
 // const expandRow = () => import('~/components/Table/table-expand.vue')
 import LaboratoryId from '~/components/LaboratoryId.vue'
 
@@ -99,9 +100,8 @@ const columns = [
 const pageParams = {
   limit: 10,
   page: 1,
-  // total: 0,
-  // laboratory: 1,
 
+  // laboratory: 1,
   experiment__laboratory: 1,
   // experiment: 1,
   ordering: 'id',
@@ -110,13 +110,16 @@ export default {
   components: { expandRow, LaboratoryId },
 
   async asyncData({ app, route }) {
-    const Params = localStorage.getItem(`${route.path}`)
-      ? JSON.parse(localStorage.getItem(`${route.path}`))
-      : pageParams
-    const [sausage] = await Promise.all([app.$API.sausage.list({ ...Params })])
+    const [sausage] = await Promise.all([
+      app.$API.sausage.list({ ...pageParams }, { get: 'sausage' }),
+    ])
     return {
       sausage: sausage.results,
-      pageParams: { ...Params, total: sausage.count },
+      pageParams: {
+        ...pageParams,
+        ...(localStorage.sausage && JSON.parse(localStorage.sausage)),
+        total: sausage.count,
+      },
     }
   },
   data() {
@@ -154,9 +157,12 @@ export default {
     async UPDATE() {
       this.loading = true
 
-      const { results, count } = await this.$API.sausage.list({
-        ...this.pageParams,
-      })
+      const { results, count } = await this.$API.sausage.list(
+        {
+          ...this.pageParams,
+        },
+        { set: 'sausage' }
+      )
       this.pageParams.total = count
       this.sausage = results
       this.loading = false
@@ -167,7 +173,7 @@ export default {
 
 <style lang="stylus">
 #custom_tableSausage .ivu-table-body {
-  height: calc(100vh - 380px);
+  height: calc(100vh - 400px);
   overflow-y: scroll;
 }
 </style>

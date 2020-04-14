@@ -4,7 +4,6 @@ section
 
   h1.mb-3 Анкеты
   //- pre.pre {{forms}}
-  //-
   Table#custom_tableForm(
     border
     :loading="loading"
@@ -39,7 +38,6 @@ section
 
 <script>
 import expandRow from '~/components/Table/table-expand.vue'
-// const expandRow = () =>('./my-async-component')
 // const expandRow = () => import('~/components/Table/table-expand.vue')
 
 const columns = [
@@ -98,11 +96,6 @@ const columns = [
     slot: 'create_time',
   },
   // {
-  //   title: 'Обновлен',
-  //   key: 'update_time',
-  //   slot: 'update_time',
-  // },
-  // {
   //   title: 'Action',
   //   slot: 'action',
   //   width: 250,
@@ -112,7 +105,7 @@ const columns = [
 const pageParams = {
   limit: 10,
   page: 1,
-  // total: 0,
+  //
   // laboratory: 1,
   // experiment__laboratory: 1,
   // experiment: 1,
@@ -122,14 +115,16 @@ export default {
   components: { expandRow },
 
   async asyncData({ app, route }) {
-    const Params = localStorage.getItem(`${route.path}`)
-      ? JSON.parse(localStorage.getItem(`${route.path}`))
-      : pageParams
-
-    const [forms] = await Promise.all([app.$API.form.list({ ...Params })])
+    const [forms] = await Promise.all([
+      app.$API.form.list({ ...pageParams }, { get: 'form' }),
+    ])
     return {
       forms: forms.results,
-      pageParams: { ...Params, total: forms.count },
+      pageParams: {
+        ...pageParams,
+        ...(localStorage.form && JSON.parse(localStorage.form)),
+        total: forms.count,
+      },
     }
   },
   data() {
@@ -152,16 +147,18 @@ export default {
       this.UPDATE()
     },
     changePage(page) {
-      // console.log(page)
       this.pageParams.page = page
       this.UPDATE()
     },
     async UPDATE() {
       this.loading = true
 
-      const { results, count } = await this.$API.form.list({
-        ...this.pageParams,
-      })
+      const { results, count } = await this.$API.form.list(
+        {
+          ...this.pageParams,
+        },
+        { set: 'form' }
+      )
       this.pageParams.total = count
       this.forms = results
       this.loading = false

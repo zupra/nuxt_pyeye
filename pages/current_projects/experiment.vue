@@ -1,15 +1,13 @@
 <template lang="pug">
 section
 
-  pre {{$route.path}}
-
   .flex
     div
       LaboratoryId(
         @laboratory="changeParams($event)"
       )
       h1.mb-3 Эксперименты
-    pre.ml-5 {{pageParams}}
+    pre.ml-5 pageParams:{{pageParams}}
 
   Table#__custom_tableExperiment(
     border
@@ -44,7 +42,7 @@ section
 <script>
 // https://vueschool.io/articles/vuejs-tutorials/lazy-loading-and-code-splitting-in-vue-js/
 import expandRow from '~/components/Table/table-expand.vue'
-// const expandRow = () =>('./my-async-component')
+// async-component
 // const expandRow = () => import('~/components/Table/table-expand.vue')
 
 import LaboratoryId from '~/components/LaboratoryId.vue'
@@ -101,19 +99,10 @@ const columns = [
 const pageParams = {
   limit: 10,
   page: 1,
-  // total: 0,
   //
   laboratory: 1,
   ordering: 'id',
 }
-
-// APIparams('experiment', 'core')
-class APIparams {
-  constructor(params) {
-    this.params = params
-  }
-}
-// new APIparams()
 
 export default {
   components: {
@@ -122,24 +111,22 @@ export default {
   },
 
   async asyncData({ app, route }) {
-    console.log(route.path)
-    // console.info('test Params', JSON.parse(localStorage.getItem(`${route.path}`)))
-    const Params = localStorage.getItem(`${route.path}`)
-      ? JSON.parse(localStorage.getItem(`${route.path}`))
-      : pageParams
-    const [Experiment] = await Promise.all([
-      app.$API.experiment.list({ ...Params }),
+    const [experiment] = await Promise.all([
+      app.$API.experiment.list({ ...pageParams }, { get: 'experiment' }),
     ])
     return {
-      experiment: Experiment.results,
-      pageParams: { ...Params, total: Experiment.count },
+      experiment: experiment.results,
+      pageParams: {
+        ...pageParams,
+        ...(localStorage.experiment && JSON.parse(localStorage.experiment)),
+        total: experiment.count,
+      },
     }
   },
   data() {
     return {
       loading: false,
       columns,
-      // pageParams,
     }
   },
   computed: {},
@@ -160,19 +147,17 @@ export default {
       this.UPDATE()
     },
     changePage(page) {
-      // console.log(page)
       this.pageParams.page = page
       this.UPDATE()
     },
     async UPDATE() {
       this.loading = true
-
-      const { results, count } = await this.$API.experiment.list({
-        // ...(this.keyword && { search: this.keyword }),
-        // ordering: 'mnemonic',
-        // laboratory: 1,
-        ...this.pageParams,
-      })
+      const { results, count } = await this.$API.experiment.list(
+        {
+          ...this.pageParams,
+        },
+        { set: 'experiment' }
+      )
       this.pageParams.total = count
       this.experiment = results
       this.loading = false
@@ -183,7 +168,7 @@ export default {
 
 <style lang="stylus">
 #__custom_tableExperiment .ivu-table-body {
-  height: calc(100vh - 440px);
+  height: calc(100vh - 400px);
   overflow-y: scroll;
 }
 </style>
